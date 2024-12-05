@@ -1,0 +1,41 @@
+﻿@page
+@model MyEF2.WebApp.Pages.Account.MFAStep1Model
+@{
+	ViewData["Title"] = "MFA Step 1";
+}
+<div class="col-md-4">
+    <!-- general form elements -->
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">MFA Step 1</h3>
+            <br />
+            <br />
+            <div>
+                Use your favourite Authenticator app and scan the code to begin. Alternatively, add your Account / Secret below to get started.
+            </div>
+        </div>
+        <!-- /.card-header -->
+        <!-- form start -->
+        <form method="post">
+            <div class="card-body">
+                <div asp-validation-summary="All" class="text-danger"></div>
+                <div class="form-group">
+                    <img style="height:250px" src="@Model.ImgSrc" alt="QR Code" />
+                </div>
+                <div class="form-group">
+                    <label>Account / Secret</label>
+                    <input type="text" class="form-control" readonly asp-for="MFASecret" />
+                </div>
+                <div class="card-footer">
+                    <br>
+                    <button type="submit" class="btn btn-success" name="action" value="submit">Next</button>
+
+
+                </div>
+            </div>
+        </form>
+
+        <!-- form end -->
+    </div>
+</div>
+<!-- /.card -->

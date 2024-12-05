@@ -1,0 +1,201 @@
+﻿@page "/Administration/NotificationTemplateDesigner/{id?}"
+@model MyEF2.WebApp.Pages.Administration.NotificationTemplateDesignerModel
+@{
+    Layout = "_EmptyLayout";
+}
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title></title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    
+    <script src="../../plugins/beeFree/Blob.js"></script>
+    <script src="../../plugins/beeFree/fileSaver.js"></script>
+    <script src="//app-rsrc.getbee.io/plugin/BeePlugin.js"></script>
+    <link href="../../plugins/beeFree/beeFree.css" rel="stylesheet" />
+    <link rel="icon" href="~/favicon.png" type="image/png">
+
+    <style>
+.centered {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  /* bring your own prefixes */ 
+  transform: translate(-50%, -50%);
+}
+</style>
+</head>
+<body>
+    <form method="post">
+       <div class="centered">
+        
+        
+    </div>
+  
+
+    <div id="bee-plugin-container"></div>
+    <div id="integrator-bottom-bar">
+      <!-- You can change the download function to get the JSON and use this input to load it -->
+      Select template to load: <input id="choose-template" type="file" />
+      <!-- You need to provide a send function to use this input field -->
+      <input id="integrator-test-emails" type="text" style="visibility:hidden;"/>
+    </div>
+
+    <script type="text/javascript">
+
+    var request = function(method, url, data, type, callback) {
+      var req = new XMLHttpRequest();
+      console.log(type);
+      req.onreadystatechange = function() {
+        if (req.readyState === 4 && req.status === 200) {
+          var response = JSON.parse(req.responseText);
+          callback(response);
+        }
+      };
+
+      req.open(method, url, true);
+      if (data && type) {
+        if(type === 'multipart/form-data') {
+          var formData = new FormData();
+          for (var key in data) {
+            formData.append(key, data[key]);
+          }
+          data = formData;          
+        }
+        else {
+          req.setRequestHeader('Content-type', type);
+        }
+      }
+
+      req.send(data);
+    };
+
+    var save = function (filename, content) {
+        //content is the email!
+      //alert(filename.substr(filename.length - 4));
+	  if(filename.substr(filename.length - 4)=="json")
+	  {
+	  saveAs(
+        new Blob([content], {type: 'text/plain;charset=utf-8'}), 
+        filename
+      ); 
+	  }
+	  else
+	  {
+	      //i've tricked the save feature by passing the json content to the filename paramater
+	      
+	      localStorage.setItem("templateContent", content);
+          localStorage.setItem("templateJson", filename);
+          var urlParams = new URLSearchParams(window.location.search)
+          window.location.href = '../TemplateDesignerPreview/@Model.Id';
+	  }
+	  
+	  
+    };
+
+    var specialLinks = [{
+        type: 'unsubscribe',
+        label: 'SpecialLink.Unsubscribe',
+        link: '[[unsubscribe]]'
+    }, {
+        type: 'subscribe',
+        label: 'SpecialLink.Subscribe',
+        link: 'http://[subscribe]/'
+    }];
+
+    var mergeTags = [{
+      name: 'First Name',
+      value: '[[FirstName]]'
+    }, {
+      name: 'Last Name',
+      value: '[[LastName]]'
+    }, {
+        name: 'Email',
+        value: '[[Email]]'
+        }, 
+        {
+            name: 'Message Body',
+            value: '[[MessageBody]]'
+        },
+        {
+            name: 'Action Button Link',
+            value: '[[ActionButton]]' 
+        },
+        {
+            name: 'Action Button Label',
+            value: '[[ActionButtonLabel]]'
+        }
+        
+        
+    ];
+
+
+    var beeConfig = {  
+      uid: 'MyEF2',
+      container: 'bee-plugin-container',
+      autosave: 15, 
+      language: 'en-US',
+      specialLinks: specialLinks,
+      mergeTags: mergeTags,
+      //mergeContents: mergeContents,
+      onSave: function(jsonFile, htmlFile) { 
+        save(jsonFile, htmlFile);
+      },
+      onSaveAsTemplate: function(jsonFile) { // + thumbnail? 
+        save('newsletter-template.json', jsonFile);
+      },
+      onAutoSave: function(jsonFile) { // + thumbnail? 
+        console.log(new Date().toISOString() + ' autosaving...');
+        window.localStorage.setItem('newsletter.autosave', jsonFile);
+      },
+      onSend: function(htmlFile) {
+        //write your send test function here
+      },
+      onError: function(errorMessage) { 
+        console.log('onError ', errorMessage);
+      }
+    };
+
+    var bee = null;
+
+    var loadTemplate = function(e) {
+      var templateFile = e.target.files[0];
+      var reader = new FileReader();
+
+      reader.onload = function() {
+        var templateString = reader.result;
+        var template = JSON.parse(templateString);
+        bee.load(template);
+      };
+
+      reader.readAsText(templateFile);
+    };
+
+    document.getElementById('choose-template').addEventListener('change', loadTemplate, false);
+
+    request(
+      'POST', 
+      'https://auth.getbee.io/apiauth',
+      'grant_type=password&client_id=5248bbb0-0a90-40db-bd2d-20c9fd23ede8&client_secret=JbPPx1xSHmr29Fwkl86ec1A8ALe4eJMwlbzPTAaaDbqIdfBfnSp',
+      'application/x-www-form-urlencoded',
+      function(token) {
+        BeePlugin.create(token, beeConfig, function(beePluginInstance) {
+          bee = beePluginInstance;
+          request(
+            'GET', 
+            '@Model.jSonURL',
+            null,
+            null,
+            function(template) {
+              bee.start(template);
+            });
+        });
+      });
+
+    </script>
+    </form>
+</body>
+</html>

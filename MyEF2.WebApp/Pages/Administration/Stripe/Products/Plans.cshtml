@@ -1,0 +1,101 @@
+﻿@page "/Administration/Stripe/Products/Plans/{id?}"
+@model MyEF2.WebApp.Pages.Administration.Stripe.Products.PlansModel
+@{
+    ViewData["Title"] = "Stripe Plans";
+    // Layout = "_GeneralLayout";
+}
+@* <div class="card-header text-center">
+    <a href="../../../Index" class="h1">
+        <img src="~/dist/img/Logo.png" style="max-width:300px" />
+    </a>
+</div>
+<br />
+<br /> *@
+<div class="container-fluid">
+    @* <h2>Plan Options</h2>
+    <div>
+        Existing plan will be highlighted, <a href="/Administration/Organisation">click here</a> to go back.
+    </div>
+    <br /> *@
+    <div class="row" style="justify-content: center;">
+        @foreach(var product in Model.StripeProducts)
+       {
+           
+            <div class="col-lg-3 col-6" >
+                <!-- small card -->
+                <div class="small-box bg-custom" id="@product.Id">
+                    <div class="inner">
+                        <h3>@product.Description</h3>
+                        <h4>$@product.Amount.ToString("N2") / @product.Frequency</h4>
+                        <p>@product.Name</p>
+                    </div>
+                    <div class="icon">
+                        <i class="ion ion-stats-bars"></i>
+                    </div>
+                    <a id="selector-@product.Id" href="Subscribe/@product.Id" class="small-box-footer">
+                        <div>Select <i class="fas fa-arrow-circle-right"></i></div>
+                    </a>
+                    <a id="viewer-@product.Id" href="/Administration/Subscription" class="small-box-footer" style="display:none">
+                        <div>View Subscription<i class="fas fa-arrow-circle-right"></i></div>
+                    </a>
+                </div>
+            </div>
+           
+       }
+    </div>
+
+</div>
+<div class="container-fluid">
+    <div class="row" style="justify-content: center;">
+        <a href="#" id="openModal">Cancel Subscription</a>
+    </div>
+</div>
+
+<form method="post">
+<div class="modal fade" id="modal-cancel">
+    <div class="modal-dialog modal-cancel">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Cancel Subscription Confirmation</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you wish to cancel your subscription. You will immediately lose features of your current subscription, and will not be charged for any further amounts. </p>
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-success" name="action" value="cancel">Cancellation Confirm</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+</form>
+
+@section PageScripts{
+    <script>
+    $(function () {
+        var planId = "@Model.SubscriptionPlan";
+        var planDiv = document.getElementById(planId);
+        var selector = document.getElementById('selector-' + planId);
+        var viewer = document.getElementById('viewer-' + planId);
+        
+        planDiv.classList.remove("bg-custom");
+        planDiv.classList.add("bg-custom-alt");
+        selector.style.display = "none";
+        viewer.style.display = "block";
+    });
+
+
+        // jQuery code to open the modal
+        $('#openModal').on('click', function (e) {
+            e.preventDefault();
+            $('#modal-cancel').modal('show');
+        });
+
+    </script>
+}

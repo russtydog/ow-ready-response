@@ -1,0 +1,267 @@
+﻿@page "/Administration/Menus/Menu/{id?}"
+@model MyEF2.WebApp.Pages.Administration.Menus.MenuModel
+@{
+    ViewData["Title"] = "Menu";
+}
+<div class="col-md-6">
+    <!-- general form elements -->
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Menu Details</h3>
+        </div>
+        <!-- /.card-header -->
+        <!-- form start -->
+        <form method="post">
+            <div class="card-body">
+                <div asp-validation-summary="All" class="text-danger"></div>
+                <div class="form-group">
+                    <label for="txtMenuName" asp-for="Menu.Name">Menu Name</label>
+                    <input type="text" asp-for="Menu.Name" class="form-control" id="txtMenuName" placeholder="Menu Name">
+                </div>
+                <div class="form-group">
+                    <label for="txtMenuName" asp-for="Menu.Url">Menu Url</label>
+                    <input type="text" asp-for="Menu.Url" class="form-control" id="txtUrl" placeholder="Menu Url">
+                </div>
+                <div class="form-group">
+                    <label for="txtMenuName" asp-for="Menu.Order">Order</label>
+                    <input type="number" asp-for="Menu.Order" class="form-control" id="txtOrder" placeholder="Order">
+                </div>
+                <div class="form-group">
+                    <label for="txtMenuName" asp-for="Menu.Icon">Menu Icon</label>
+                    <input type="text" asp-for="Menu.Icon" class="form-control" id="txtIcon" placeholder="Menu Icon">
+                </div>
+            </div>
+            <div class="card-footer">
+                <br>
+                <button type="submit" class="btn btn-success" name="action" value="submit">Save</button>
+                @if (Model.Id != null)
+                {
+                    @* <button type="submit" class="btn btn-default" name="action" value="delete">Delete</button> *@
+                    <button type="button" class="btn btn-default" data-toggle="modal" data-target="#modal-delete">
+                        Delete
+                    </button>
+                }
+                <a class="btn btn-default" href="/Administration/Menus">Back</a>
+            </div>
+
+            <div class="modal fade" id="modal-delete">
+                <div class="modal-dialog modal-delete">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Delete Confirmation</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <p>Are you sure you wish to delete this record? This cannot be recovered if you confirm.&hellip;</p>
+                        </div>
+                        <div class="modal-footer justify-content-between">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-success" name="action" value="delete">Delete Confirm</button>
+                        </div>
+                    </div>
+                    <!-- /.modal-content -->
+                </div>
+                <!-- /.modal-dialog -->
+            </div>
+            <!-- /.modal -->
+        </form>
+
+        <!-- form end -->
+    </div>
+</div>
+<!-- /.card -->
+@if (Model.Id != null)
+{
+<div class="col-md-6">
+    <!-- general form elements -->
+        <div class="col-md-12" style="text-align: right;">
+            <a href="#modal-submenu" class="btn btn-success" data-toggle="modal">Create</a>
+
+        </div>
+        <br />
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Sub Menu</h3>
+        </div>
+        <div class="card-body">
+
+            <table class="table table-bordered table-striped" id=tblMenus>
+                <thead>
+                    <tr>
+                        <th>Menu</th>
+                        <th>Url</th>
+                        <th>Order</th>
+                        <th>Icon</th>
+                        <th>Action</th>
+                    </tr>
+
+                </thead>
+                <tbody>
+                    @if (Model.Menu.SubMenus != null)
+                    {
+                        foreach (var menu in Model.Menu.SubMenus)
+                        {
+                            <tr>
+                                <td><a >@menu.Name</a></td>
+                                <td><a >@menu.Url</a></td>
+                                <td><a >@menu.Order</a></td>
+                                <td><a >@menu.Icon</a></td>
+                                    <td><a id="editSubMenu" style="cursor:pointer" onclick="getSubMenu('@menu.Id')"><i class="fas fa-edit"></i>
+
+                                </a>
+
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+    <div class="modal fade" id="modal-submenu">
+        <div class="modal-dialog modal-submenu">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Sub Menu</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Add/Edit Sub Menu</p>
+                    <div class="form-group">
+                        <label for="txtMenuName" asp-for="Menu.Name">Menu Name</label>
+                        <input type="text" class="form-control" id="txtSubMenuName" placeholder="Menu Name">
+                    </div>
+                    <div class="form-group">
+                        <label for="txtMenuName" asp-for="Menu.Url">Menu Url</label>
+                        <input type="text" class="form-control" id="txtSubMenuUrl" placeholder="Menu Url">
+                    </div>
+                    <div class="form-group">
+                        <label for="txtMenuName" asp-for="Menu.Order">Order</label>
+                        <input type="number" class="form-control" id="txtSubMenuOrder" placeholder="Order">
+                    </div>
+                    <div class="form-group">
+                        <label for="txtMenuName" asp-for="Menu.Icon">Menu Icon</label>
+                        <input type="text" class="form-control" id="txtSubMenuIcon" placeholder="Menu Icon">
+                    </div>
+                    <input type="hidden" id="txtSubMenuId" />
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <a class="btn btn-success" id="btnSaveSubMenu" >Save</a>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+<!-- /.card -->
+}
+@section PageScripts
+{
+    <script>
+        $(function () {
+            $("#tblMenus").DataTable({
+                "responsive": true, "lengthChange": false, "autoWidth": true,
+                
+            });
+        });
+    </script>
+
+
+    <script>
+        //function to use Ajax to get existing SubMenuItem from handler called GetSubMenu. pass the current {id} route
+        function getSubMenu(childId) {
+            
+            $.ajax({
+                type: "GET",
+                url: "?handler=GetSubMenu",
+                data: { childId: childId },
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    console.log(response);
+                    // var subMenus = response.subMenus.$values; // Access the array of subMenus
+
+                    // subMenus.forEach(function (subMenu) {
+                    //     var id = subMenu.id; // Get the id of each subMenu
+                    //     var name = subMenu.name; // Get the name of each subMenu
+                    //     var url = subMenu.url; // Get the url of each subMenu
+                    //     var order = subMenu.order; // Get the order of each subMenu
+                    //     var icon = subMenu.icon; // Get the icon of each subMenu
+                    // });
+
+                    var name = response.name;
+                    var url = response.url;
+                    var order = response.order;
+                    var icon = response.icon;
+                    var id = response.id;
+
+                    //set the values in the submenu modal to the response
+                    $("#txtSubMenuName").val(name);
+                    $("#txtSubMenuUrl").val(url);
+                    $("#txtSubMenuOrder").val(order);
+                    $("#txtSubMenuIcon").val(icon);
+                    $("#txtSubMenuId").val(id);
+
+                    //show modal
+                    $('#modal-submenu').modal('show');
+                },
+                failure: function (response) {
+                    console.log(response);
+                }
+            });
+        }
+
+        //function to use Ajax to send the txtSubMenu values to a codebehind handler. It will include passing the current {id} route
+        
+        $("#btnSaveSubMenu").click(function () {
+            console.log('Calling Ajax');
+
+            $.ajax({
+                url: "?handler=SaveSubMenu",
+                method: "POST",
+                headers: {
+                    "X-Api-Key": "your_valid_api_key"
+                },
+                contentType: "application/json",
+                // data: JSON.stringify($("#messages").html()),
+                data: JSON.stringify({
+                    name: $("#txtSubMenuName").val(),
+                    url: $("#txtSubMenuUrl").val(), //always documents
+                    order: $("#txtSubMenuOrder").val(),
+                    icon: $("#txtSubMenuIcon").val(),
+                    parentId: '@Model.Id',
+                    id: $("#txtSubMenuId").val()
+                }),
+                success: function (response) {
+                    console.log(response);
+                    //set the submenu fields to ''
+                    $("#txtSubMenuName").val('');
+                    $("#txtSubMenuUrl").val('');
+                    $("#txtSubMenuOrder").val('');
+                    $("#txtSubMenuIcon").val('');
+                    $("#txtSubMenuId").val('');
+                    //hide modal
+                    $('#modal-submenu').modal('hide');
+                    //reload page
+                    location.reload();
+
+                },
+                failure: function (response) {
+                            console.log(response);
+                        },
+                error: function (jqXHR, textStatus, errorThrown) {
+                            console.log("AJAX error: " + textStatus + ' : ' + errorThrown);
+                        }
+            });
+
+
+        });
+    </script>
+}

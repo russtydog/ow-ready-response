@@ -1,0 +1,30 @@
+﻿@page
+@model MyEF2.WebApp.Pages.TermsModel
+@{
+    ViewData["Title"] = "Terms";
+    Layout = "_EmptyLayout";
+}
+<head>
+<title>Terms of Service</title>
+</head>
+<body>
+<div class="card-header text-center" style="text-align: center;">
+    <a href="../../../Index" class="h1">
+        <img src="~/dist/img/Logo.png" style="max-width:300px" />
+    </a>
+</div>
+<br />
+<br />
+<div class="container-fluid" style="padding:30px">
+    <h2>Terms of Service</h2>
+    <div>
+        <a href="/Account/Register">click here</a> to go back.
+    </div>
+    <br />
+   
+    <div class="row">
+        @Html.Raw(Model.TermsOfService)
+
+    </div>
+</div>
+</body>

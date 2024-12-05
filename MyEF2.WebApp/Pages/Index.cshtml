@@ -1,0 +1,748 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Welcome";
+    Layout = "_EmptyLayout";
+}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>@Model.Setting.ApplicationName</title>
+
+  <link rel="shortcut icon" href="/favicon.png" type="image/x-icon">
+  <link rel="icon" href="/favicon.png" type="image/x-icon">
+  <!--- End favicon-->
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Raleway:wght@600;700&display=swap" rel="stylesheet">
+  <!-- End google font  -->
+
+  <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+  <link rel="stylesheet" href="assets/css/magnific-popup.css">
+  <link rel="stylesheet" href="assets/css/slick.css">
+  <link rel="stylesheet" href="assets/css/animate.css">
+  <link rel="stylesheet" href="assets/css/fontawesome.css">
+
+
+  <!-- Code Editor  -->
+    <style>
+      :root {
+          --heading-color: #000;
+          --body-color: #0C0C0C;
+          --primary-color: @Model.Setting.ActiveItemBackgroundColor;
+          --secondary-color: @Model.Setting.ActiveItemBackgroundColorHover;
+          --white-color: #ffffff;
+          --gray-color: #414141;
+          --light-color: #E6E6E6;
+          --dark-bg: #000000;
+          --blue-bg: @Model.Setting.ActiveItemBackgroundColor;
+          --light-bg: #FAFAFA;
+          --white-bg: #fff
+      }
+  </style>
+    <style>
+        .semi-circle {
+            position: absolute;
+            bottom: 0; /* Anchors the semi-circle to the bottom */
+            left: 50%;
+            transform: translateX(-50%); /* Centering the semi-circle */
+            width: 1000px; /* Matching the width of the container */
+            height: 500px; /* Custom height for the semi-circle */
+            border-radius: 500px 500px 0 0; /* Adjusted for proper curvature */
+            background-color: @Model.Setting.ActiveItemBackgroundColor; /* Color of the semi-circle */
+            z-index: -1; /* Ensures the semi-circle is behind the content */
+        }
+    </style>
+  <link rel="stylesheet" href="assets/css/main.css">
+  <link rel="stylesheet" href="assets/css/app.min.css">
+</head>
+
+<body class="light">
+
+  <div class="zubuz-preloader-wrap">
+    <div class="zubuz-preloader">
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+  </div>
+
+
+
+
+  <header class="site-header site-header--menu-center zubuz-header-section" id="sticky-menu">
+    <div class="container">
+      <nav class="navbar site-navbar">
+        <!-- Brand Logo-->
+        <div class="brand-logo">
+          <a href="/Index">
+            <img src="dist/img/Logo.png" alt="" class="light-version-logo">
+          </a>
+        </div>
+        <div class="menu-block-wrapper">
+          <div class="menu-overlay"></div>
+          <nav class="menu-block" id="append-menu-header">
+            <div class="mobile-menu-head">
+              <div class="go-back">
+                <i class="fa fa-angle-left"></i>
+              </div>
+              <div class="current-menu-title"></div>
+              <div class="mobile-menu-close">&times;</div>
+            </div>
+            <ul class="site-menu-main">
+              
+              <li class="nav-item">
+                <a href="about-us.html" class="nav-link-item">About Us</a>
+              </li>
+              <li class="nav-item">
+                <a href="/Pricing" class="nav-link-item">Pricing</a>
+              </li>
+              <li class="nav-item">
+                <a href="contact-us.html" class="nav-link-item">Contact Us</a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+
+        <div class="header-btn header-btn-l1 ms-auto d-none d-xs-inline-flex">
+          <div class="zubuz-header-btn-wrap">
+            <a class="zubuz-login-btn" href="/Dashboard">Login</a>
+          </div>
+          <a class="zubuz-default-btn zubuz-header-btn" href="/Pricing">
+            <span>Get Started</span>
+          </a>
+        </div>
+        <!-- mobile menu trigger -->
+        <div class="mobile-menu-trigger light">
+          <span></span>
+        </div>
+        <!--/.Mobile Menu Hamburger Ends-->
+      </nav>
+    </div>
+  </header>
+  <!--End landex-header-section -->
+
+  <div class="zubuz-hero-section" @* style="background-image: url(assets/images/v1/hero-shape1.png)" *@>
+    <div class="container">
+      <div class="zubuz-hero-content center position-relative">
+        <h1>@Model.Setting.HeroTitle</h1>
+        <p>@Model.Setting.HeroDescription</p>
+        <div class="zubuz-hero-btn-wrap center">
+          <a class="zubuz-default-btn" href="/Pricing"> <span>Start Your Free Trial</span> </a>
+          
+        </div>
+        <div class="zubuz-hero-shape">
+          <img src="assets/images/v1/shape.png" alt="">
+        </div>
+      </div>
+      <div class="zubuz-hero-bottom">
+                <div class="semi-circle">
+                </div>
+        <div class="zubuz-hero-thumb wow fadeInUpX">
+          <img src="assets/images/v1/hero-mocup1.png" alt="">
+        </div>
+        <div class="zubuz-hero-card card1 wow zoomIn">
+          <img src="assets/images/v1/h-card1.png" alt="">
+        </div>
+        <div class="zubuz-hero-card card2 wow zoomIn">
+          <img src="assets/images/v1/h-card2.png" alt="">
+        </div>
+        <div class="zubuz-hero-card card3 wow zoomIn">
+          <img src="assets/images/v1/h-card4.png" alt="">
+        </div>
+        <div class="zubuz-hero-card card4 wow zoomIn">
+          <img src="assets/images/v1/h-card3.png" alt="">
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- End section -->
+
+  <div class="section dark-bg zubuz-section-padding4">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-5">
+          <div class="zubuz-brand-logo-content">
+            <h3>@Model.Setting.CustomersStatement</h3>
+          </div>
+        </div>
+        <div class="col-lg-7">
+          <div class="zubuz-brand-slider">
+            <div class="zubuz-brand-item">
+              <img src="assets/images/v1/b_1.png" alt="">
+            </div>
+            <div class="zubuz-brand-item">
+              <img src="assets/images/v1/b_2.png" alt="">
+            </div>
+            <div class="zubuz-brand-item">
+              <img src="assets/images/v1/b_3.png" alt="">
+            </div>
+            <div class="zubuz-brand-item">
+              <img src="assets/images/v1/b_4.png" alt="">
+            </div>
+            <div class="zubuz-brand-item">
+              <img src="assets/images/v1/b_5.png" alt="">
+            </div>
+            <div class="zubuz-brand-item">
+              <img src="assets/images/v1/b_6.png" alt="">
+            </div>
+          </div>
+          <div class="zubuz-brand-slider2">
+            <div class="zubuz-brand-item">
+              <img src="assets/images/v1/b_1.png" alt="">
+            </div>
+            <div class="zubuz-brand-item">
+              <img src="assets/images/v1/b_2.png" alt="">
+            </div>
+            <div class="zubuz-brand-item">
+              <img src="assets/images/v1/b_3.png" alt="">
+            </div>
+            <div class="zubuz-brand-item">
+              <img src="assets/images/v1/b_4.png" alt="">
+            </div>
+            <div class="zubuz-brand-item">
+              <img src="assets/images/v1/b_5.png" alt="">
+            </div>
+            <div class="zubuz-brand-item">
+              <img src="assets/images/v1/b_6.png" alt="">
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <!-- End section -->
+
+  <div class="section zubuz-section-padding2">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-5">
+          <div class="zubuz-thumb thumb-pr">
+            <img src="assets/images/v1/mocup01.png" alt="">
+            <div class="zubuz-thumb-card">
+              <img src="assets/images/v1/card1.png" alt="">
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-7 d-flex align-items-center">
+          <div class="zubuz-default-content">
+            <h2>@Model.Setting.Feature1Title</h2>
+            <p>@Model.Setting.Feature1Description</p>
+            <div class="zubuz-extara-mt">
+              <p><span class="font-semibold">@Model.Setting.Feature1Highlight1Title:</span> @Model.Setting.Feature1Highlight1Description</p>
+              <p><span class="font-semibold">@Model.Setting.Feature1Hightlight2Title:</span> @Model.Setting.Feature1Hightlight2Description</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- End section -->
+
+  <div class="section zubuz-section-padding5">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-5 order-lg-2">
+          <div class="zubuz-thumb thumb-pl">
+            <img src="assets/images/v1/mocup2.png" alt="">
+            <div class="zubuz-thumb-card2">
+              <img src="assets/images/v1/card2.png" alt="">
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-7 d-flex align-items-center">
+          <div class="zubuz-default-content">
+            <h2>@Model.Setting.Feature2Title</h2>
+            <p>@Model.Setting.Feature2Description</p>
+            <div class="zubuz-extara-mt">
+              <div class="zubuz-iconbox-wrap-left">
+                <div class="zubuz-iconbox-icon">
+                  <img src="assets/images/v1/icon1.png" alt="">
+                </div>
+                <div class="zubuz-iconbox-data">
+                  <span>@Model.Setting.Feature2Hightlight1Title</span>
+                  <p>@Model.Setting.Feature2Hightlight1Description</p>
+                </div>
+              </div>
+              <div class="zubuz-iconbox-wrap-left">
+                <div class="zubuz-iconbox-icon">
+                  <img src="assets/images/v1/icon2.png" alt="">
+                </div>
+                <div class="zubuz-iconbox-data">
+                  <span>@Model.Setting.Feature2Hightlight2Title</span>
+                  <p>@Model.Setting.Feature2Hightlight2Description</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- End section -->
+
+  <div class="section zubuz-section-padding3 bg-light">
+    <div class="container">
+      <div class="zubuz-section-title center">
+        <h2>@Model.Setting.FeaturesListTitle</h2>
+      </div>
+      <div class="row">
+        <div class="col-xl-4 col-md-6">
+          <div class="zubuz-iconbox-wrap center">
+            <div class="zubuz-iconbox-icon">
+              <img src="assets/images/v1/icon3.png" alt="">
+            </div>
+            <div class="zubuz-iconbox-data">
+              <h3>@Model.Setting.FeaturesListFeature1Title</h3>
+              <p>@Model.Setting.FeaturesListFeature1Description</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-xl-4 col-md-6">
+          <div class="zubuz-iconbox-wrap center">
+            <div class="zubuz-iconbox-icon">
+              <img src="assets/images/v1/icon4.png" alt="">
+            </div>
+            <div class="zubuz-iconbox-data">
+              <h3>@Model.Setting.FeaturesListFeature2Title</h3>
+              <p>@Model.Setting.FeaturesListFeature2Description</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-xl-4 col-md-6">
+          <div class="zubuz-iconbox-wrap center">
+            <div class="zubuz-iconbox-icon">
+              <img src="assets/images/v1/icon5.png" alt="">
+            </div>
+            <div class="zubuz-iconbox-data">
+              <h3>@Model.Setting.FeaturesListFeature3Title</h3>
+              <p>@Model.Setting.FeaturesListFeature3Description</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-xl-4 col-md-6">
+          <div class="zubuz-iconbox-wrap center">
+            <div class="zubuz-iconbox-icon">
+              <img src="assets/images/v1/icon6.png" alt="">
+            </div>
+            <div class="zubuz-iconbox-data">
+              <h3>@Model.Setting.FeaturesListFeature4Title</h3>
+              <p>@Model.Setting.FeaturesListFeature4Description</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-xl-4 col-md-6">
+          <div class="zubuz-iconbox-wrap center">
+            <div class="zubuz-iconbox-icon">
+              <img src="assets/images/v1/icon7.png" alt="">
+            </div>
+            <div class="zubuz-iconbox-data">
+              <h3>@Model.Setting.FeaturesListFeature5Title</h3>
+              <p>@Model.Setting.FeaturesListFeature5Description</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-xl-4 col-md-6">
+          <div class="zubuz-iconbox-wrap center">
+            <div class="zubuz-iconbox-icon">
+              <img src="assets/images/v1/icon8.png" alt="">
+            </div>
+            <div class="zubuz-iconbox-data">
+              <h3>@Model.Setting.FeaturesListFeature6Title</h3>
+              <p>@Model.Setting.FeaturesListFeature6Description</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- End Section -->
+
+  <div class="scetion zubuz-section-padding2">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-7 order-lg-2">
+          <div class="zubuz-default-content">
+            <h2>@Model.Setting.AccordianHeroTitle</h2>
+            <p>@Model.Setting.AccordianHeroDescription1</p>
+            <p>@Model.Setting.AccordianHeroDescription2</p>
+            <div class="zubuz-extara-mt">
+              <a class="zubuz-default-btn" href="/Pricing">
+                <span>Start Your Free Trial</span>
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-5">
+          <div class="zubuz-accordion-wrap" id="zubuz-accordion">
+            <div class="zubuz-accordion-item open">
+              <div class="zubuz-accordion-header">
+                <h3>@Model.Setting.Accordian1Title</h3>
+                <div class="zubuz-active-icon">
+                  <svg width="22" height="13" viewBox="0 0 22 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M19.75 2.25L11 11L2.25 2.25" stroke="#111827" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                </div>
+              </div>
+              <div class="zubuz-accordion-body">
+                <p>@Model.Setting.Accordian1Description</p>
+              </div>
+            </div>
+            <div class="zubuz-accordion-item">
+              <div class="zubuz-accordion-header">
+                <h3>@Model.Setting.Accordian2Title</h3>
+                <div class="zubuz-active-icon">
+                  <svg width="22" height="13" viewBox="0 0 22 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M19.75 2.25L11 11L2.25 2.25" stroke="#111827" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                </div>
+              </div>
+              <div class="zubuz-accordion-body">
+                <p>@Model.Setting.Accordian2Description</p>
+              </div>
+            </div>
+            <div class="zubuz-accordion-item">
+              <div class="zubuz-accordion-header">
+                <h3>@Model.Setting.Accordian3Title</h3>
+                <div class="zubuz-active-icon">
+                  <svg width="22" height="13" viewBox="0 0 22 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M19.75 2.25L11 11L2.25 2.25" stroke="#111827" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                </div>
+              </div>
+              <div class="zubuz-accordion-body">
+                <p>@Model.Setting.Accordian3Description</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- End section -->
+    @if (Model.Setting.EnableReviews)
+    {
+        <div class="section zubuz-section-padding2 bg-light">
+            <div class="container">
+                <div class="zubuz-section-title center">
+                    <h2>@Model.Setting.ReviewsTitle</h2>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="zubuz-testimonial-wrap">
+                            <div class="zubuz-testimonial-rating">
+                                <ul>
+                                    @for (int i = 1; i<=(int)Model.Setting.Review1Rating; i++)
+                                    {
+                                        <li><img src="assets/images/icon/star-green.svg" alt=""></li>
+                                    }
+                                </ul>
+                            </div>
+                            <div class="zubuz-testimonial-data">
+                                <h3>@Model.Setting.Review1Title</h3>
+                                <p>"@Model.Setting.Review1Description"</p>
+                            </div>
+                            <div class="zubuz-testimonial-author">
+                                <div class="zubuz-testimonial-author-thumb">
+                                    <img src="assets/images/v1/t_user1.png" alt="">
+                                </div>
+                                <div class="zubuz-testimonial-author-data">
+                                    <span>@Model.Setting.Review1Author</span>
+                                    <p>@Model.Setting.Review1AuthorCompany</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="zubuz-testimonial-wrap">
+                            <div class="zubuz-testimonial-rating">
+                                <ul>
+                                    @for (int i = 1; i <= (int)Model.Setting.Review2Rating; i++)
+                                    {
+                                        <li><img src="assets/images/icon/star-green.svg" alt=""></li>
+                                    }
+                                </ul>
+                            </div>
+                            <div class="zubuz-testimonial-data">
+                                <h3>@Model.Setting.Review2Title</h3>
+                                <p>"@Model.Setting.Review2Description"</p>
+                            </div>
+                            <div class="zubuz-testimonial-author">
+                                <div class="zubuz-testimonial-author-thumb">
+                                    <img src="assets/images/v1/t_user1.png" alt="">
+                                </div>
+                                <div class="zubuz-testimonial-author-data">
+                                    <span>@Model.Setting.Review2Author</span>
+                                    <p>@Model.Setting.Review2AuthorCompany</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="zubuz-testimonial-wrap">
+                            <div class="zubuz-testimonial-rating">
+                                <ul>
+                                    @for (int i = 1; i <= (int)Model.Setting.Review3Rating; i++)
+                                    {
+                                        <li><img src="assets/images/icon/star-green.svg" alt=""></li>
+                                    }
+                                </ul>
+                            </div>
+                            <div class="zubuz-testimonial-data">
+                                <h3>@Model.Setting.Review3Title</h3>
+                                <p>"@Model.Setting.Review3Description"</p>
+                            </div>
+                            <div class="zubuz-testimonial-author">
+                                <div class="zubuz-testimonial-author-thumb">
+                                    <img src="assets/images/v1/t_user1.png" alt="">
+                                </div>
+                                <div class="zubuz-testimonial-author-data">
+                                    <span>@Model.Setting.Review3Author</span>
+                                    <p>@Model.Setting.Review3AuthorCompany</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="zubuz-testimonial-wrap">
+                            <div class="zubuz-testimonial-rating">
+                                <ul>
+                                    @for (int i = 1; i <= (int)Model.Setting.Review4Rating; i++)
+                                    {
+                                        <li><img src="assets/images/icon/star-green.svg" alt=""></li>
+                                    }
+                                </ul>
+                            </div>
+                            <div class="zubuz-testimonial-data">
+                                <h3>@Model.Setting.Review4Title</h3>
+                                <p>"@Model.Setting.Review4Description"</p>
+                            </div>
+                            <div class="zubuz-testimonial-author">
+                                <div class="zubuz-testimonial-author-thumb">
+                                    <img src="assets/images/v1/t_user1.png" alt="">
+                                </div>
+                                <div class="zubuz-testimonial-author-data">
+                                    <span>@Model.Setting.Review4Author</span>
+                                    <p>@Model.Setting.Review4AuthorCompany</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="zubuz-testimonial-btn">
+                    <a class="zubuz-default-btn" href="testimonials.html">
+                        <span>View All Reviews</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <!-- End Section -->
+    }
+  <div class="section zubuz-section-padding3">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8">
+          <div class="zubuz-section-title">
+            <h2>Browse our latest news and articles</h2>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xl-4 col-lg-6">
+          <div class="zubuz-blog-wrap">
+            <a href="">
+              <div class="zubuz-blog-thumb">
+                <img src="assets/images/blog/blog1.png" alt="">
+                <div class="zubuz-blog-categorie">
+                  Business
+                </div>
+              </div>
+            </a>
+            <div class="zubuz-blog-data">
+              <p>June 18, 2024</p>
+              <a href="">
+                <h3>What is a good solution for finance apps?</h3>
+              </a>
+              <a class="zubuz-blog-btn" href="">
+                <svg width="26" height="22" viewBox="0 0 26 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M15.5 2.25L24.25 11M24.25 11L15.5 19.75M24.25 11L1.75 11" stroke="black" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+              </a>
+            </div>
+
+          </div>
+        </div>
+        <div class="col-xl-4 col-lg-6">
+          <div class="zubuz-blog-wrap">
+            <a href="">
+              <div class="zubuz-blog-thumb">
+                <img src="assets/images/blog/blog2.png" alt="">
+                <div class="zubuz-blog-categorie">
+                  Technology
+                </div>
+              </div>
+            </a>
+            <div class="zubuz-blog-data">
+              <p>June 18, 2024</p>
+              <a href="">
+                <h3>What makes banking app development ideal?</h3>
+              </a>
+              <a class="zubuz-blog-btn" href="">
+                <svg width="26" height="22" viewBox="0 0 26 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M15.5 2.25L24.25 11M24.25 11L15.5 19.75M24.25 11L1.75 11" stroke="black" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="col-xl-4 col-lg-6">
+          <div class="zubuz-blog-wrap">
+            <a href="">
+              <div class="zubuz-blog-thumb">
+                <img src="assets/images/blog/blog3.png" alt="">
+                <div class="zubuz-blog-categorie">
+                  Management
+                </div>
+              </div>
+            </a>
+            <div class="zubuz-blog-data">
+              <p>June 18, 2024</p>
+              <a href="">
+                <h3>Finance apps that will help you make money!</h3>
+              </a>
+              <a class="zubuz-blog-btn" href="">
+                <svg width="26" height="22" viewBox="0 0 26 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M15.5 2.25L24.25 11M24.25 11L15.5 19.75M24.25 11L1.75 11" stroke="black" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+              </a>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- End Section -->
+
+  <div class="zubuz-cta-section blue-bg">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-7 order-lg-2 d-flex align-items-center">
+          <div class="zubuz-default-content light">
+            <h2>@Model.Setting.DownloadActionTitle</h2>
+            <p>@Model.Setting.DownloadActionDescription</p>
+            <div class="zubuz-extara-mt">
+              <div class="zubuz-app-wrap">
+                <a class="zubuz-app" href="/Pricing"><img src="assets/images/v1/play-store.png" alt=""></a>
+                <a class="zubuz-app" href="/Pricing"><img src="assets/images/v1/app-store.png" alt=""></a>
+                <div class="zubuz-cta-shape">
+                  <img src="assets/images/v1/shape2.png" alt="">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-5">
+          <div class="zubuz-cta-thumb">
+            <img src="assets/images/v1/cta-mocup.png" alt="">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- End section -->
+
+
+
+  <footer class="zubuz-footer-section main-footer">
+    <div class="container">
+      <div class="zubuz-footer-top">
+        <div class="row">
+          <div class="col-xl-4 col-lg-12">
+            <div class="zubuz-footer-textarea">
+              <a href="">
+                <img src="dist/img/Logo.png" alt="">
+              </a>
+              <p>@Model.Setting.SubscribeText</p>
+              
+            </div>
+          </div>
+          <div class="col-xl-3 col-md-4">
+            <div class="zubuz-footer-menu extar-margin">
+              <div class="zubuz-footer-title">
+                <p>Navigation</p>
+              </div>
+              <ul>
+                <li><a href="">About Us</a></li>
+                <li><a href="/Pricing">Pricing</a></li>
+                <li><a href="">Contact</a></li>
+                <li><a href="/Dashboard">Login</a></li>
+              </ul>
+            </div>
+          </div>
+          
+        </div>
+      </div>
+      <div class="zubuz-footer-bottom">
+        <div class="zubuz-social-icon order-md-2">
+          <ul>
+            <li>
+              <a href="https://twitter.com/" target="_blank">
+                <i class="fab fa-twitter"></i>
+              </a>
+            </li>
+            <li>
+              <a href="https://facebook.com/" target="_blank">
+                <i class="fab fa-facebook-f"></i>
+              </a>
+            </li>
+            <li>
+              <a href="https://www.instagram.com/" target="_blank">
+                <i class="fab fa-instagram"></i>
+              </a>
+            </li>
+            <li>
+              <a href="https://www.linkedin.com/" target="_blank">
+                <i class="fab fa-linkedin"></i>
+              </a>
+            </li>
+            <li>
+              <a href="https://github.com/" target="_blank">
+                <i class="fab fa-github"></i>
+              </a>
+            </li>
+          </ul>
+        </div>
+        <div class="zubuz-copywright">
+          <p> &copy;Copyright 2024, All Rights Reserved by Mthemeus</p>
+        </div>
+      </div>
+
+    </div>
+  </footer>
+
+
+
+
+
+  <!-- scripts -->
+  <script src="assets/js/jquery-3.6.0.min.js"></script>
+  <script src="assets/js/bootstrap.bundle.min.js"></script>
+  <script src="assets/js/menu/menu.js"></script>
+  <script src="assets/js/isotope.pkgd.min.js"></script>
+  <script src="assets/js/jquery.magnific-popup.min.js"></script>
+  <script src="assets/js/slick.js"></script>
+  <script src="assets/js/countdown.js"></script>
+  <script src="assets/js/wow.min.js"></script>
+  <script src="assets/js/faq.js"></script>
+
+  <script src="assets/js/app.js"></script>
+
+
+</body>
+</html>

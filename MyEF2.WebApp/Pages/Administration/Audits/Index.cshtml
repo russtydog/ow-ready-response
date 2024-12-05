@@ -1,0 +1,70 @@
+﻿@page
+@model MyEF2.WebApp.Pages.Administration.Audits.IndexModel
+@{
+    ViewData["Title"] = "Audits";
+}
+
+<div class="col-md-12">
+	<div class="card">
+		<div class="card-header">
+			<h3 class="card-title">Audits</h3>
+		</div>
+		<!-- /.card-header -->
+		<div class="card-body">
+			<table class="table table-bordered table-striped" id=tblAudits>
+				<thead>
+					<tr>
+						<th>Date</th>
+						<th>User</th>
+						<th>Entity</th>
+						<th>Property Name</th>
+						<th>Value</th>
+						<th>Action</th>
+						<th>Entity Id</th>
+						<th></th>
+					</tr>
+
+				</thead>
+				
+			</table>
+		</div>
+	</div>
+
+</div>
+
+
+@section PageScripts
+{
+
+	
+	<script>
+		$(document).ready(function () {
+			$('#tblAudits').DataTable({
+				"processing": true,
+				"serverSide": true,
+				"nowrap": true,
+				"responsive": true, "lengthChange": false, "autoWidth": true, 
+				"order": [[0, "desc"]],
+				"buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"],
+				"ajax": {
+					"url": "?handler=Audits",
+					"type": "POST",
+					"dataSrc": function (json) {
+						// Navigate through the JSON object to reach the array
+						return json.data.$values;
+					}
+				},
+				"columns": [
+					{ "data": "date" },        // Assuming 'date' is a field in your data
+					{ "data": "userName" },    // Assuming 'userName' is a field in your data
+					{ "data": "entityName" },  // Assuming 'entityName' is a field in your data
+					{ "data": "propertyName" },// Assuming 'propertyName' is a field in your data
+					{ "data": "newValue" },    // Assuming 'newValue' is a field in your data
+					{ "data": "action" },      // Assuming 'action' is a field in your data
+					{ "data": "entityId" },     // Assuming 'entityId' is a field in your data
+					{ "data": "url" }     // Assuming 'entityId' is a field in your data
+				]
+			}).buttons().container().appendTo('#tblAudits_wrapper .col-md-6:eq(0)');
+		});
+	</script>
+}

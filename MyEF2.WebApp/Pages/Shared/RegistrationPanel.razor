@@ -1,0 +1,24 @@
+﻿@page "/registrationpanel"
+
+@code {
+    [Inject]
+    private MyEF2.DAL.Services.SettingService settingService { get; set; }
+
+    private MyEF2.DAL.Entities.Setting settings { get; set; }
+
+    [Parameter]
+    public string UserName { get; set; }
+
+}
+
+@if(settings.EnableRegistration){
+<p class="mb-0">
+    <a href="Register" class="text-center">Register a new account</a>
+</p>
+    }
+@code {
+    protected override void OnParametersSet()
+    {
+        settings = settingService.GetSettings();
+    }
+}

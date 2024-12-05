@@ -1,0 +1,21 @@
+@page "/slicktracker"
+
+@code {
+    [Inject]
+    private MyEF2.DAL.Services.SettingService settingService { get; set; }
+    private string SlickTrackerUrl { get; set; }
+
+    protected override void OnInitialized()
+    {
+        SlickTrackerUrl = settingService.GetSettings().SlickTrackerUrl;
+
+        if(string.IsNullOrEmpty(SlickTrackerUrl))
+        {
+            SlickTrackerUrl = "";
+        }
+    }
+}
+@if(!string.IsNullOrEmpty(SlickTrackerUrl))
+{
+    <script src="@SlickTrackerUrl"></script>
+}

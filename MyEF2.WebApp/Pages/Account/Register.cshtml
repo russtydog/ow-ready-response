@@ -1,0 +1,74 @@
+﻿@page
+@model MyEF2.WebApp.Pages.Account.RegisterModel
+@{
+	Layout="_RegisterLayout";
+	ViewData["Title"] = "Register";
+}
+
+
+			<form method="post">
+				<div asp-validation-summary="All" class="text-danger"></div>
+				<div class="input-group mb-3">
+					<input type="text" asp-for="NewUser.FirstName" placeholder="First Name" class="form-control" />
+					<div class="input-group-append">
+						<div class="input-group-text">
+							<span class="fas fa-user"></span>
+						</div>
+					</div>
+				</div>
+				<div class="input-group mb-3">
+					<input type="text" asp-for="NewUser.LastName" placeholder="Last Name" class="form-control" />
+					<div class="input-group-append">
+						<div class="input-group-text">
+							<span class="fas fa-user"></span>
+						</div>
+					</div>
+				</div>
+				<div class="input-group mb-3">
+					<input type="email" asp-for="Registration.Email" placeholder="Email Address" class="form-control" />
+					<div class="input-group-append">
+							<div class="input-group-text">
+								<span class="fas fa-envelope"></span>
+							</div>
+						</div>
+				</div>
+				<span asp-validation-for="Registration.Email" class="text-danger"></span>
+
+				<div class="input-group mb-3">
+					<input type="password" asp-for="Registration.Password" placeholder="Password" class="form-control" />
+					<div class="input-group-append">
+						<div class="input-group-text">
+							<span class="fas fa-lock"></span>
+						</div>
+					</div>
+				</div>
+				<span asp-validation-for="Registration.Password" class="text-danger"></span>
+
+				<div class="input-group mb-3">
+					<input type="password" asp-for="Registration.ConfirmPassword" placeholder="Confirm Password" class="form-control" />
+					<div class="input-group-append">
+						<div class="input-group-text">
+							<span class="fas fa-lock"></span>
+						</div>
+					</div>
+				</div>
+	<span asp-validation-for="Registration.ConfirmPassword" class="text-danger"></span>
+	<div class="row">
+					<div class="col-8">
+						<div class="icheck-primary">
+							<input type="checkbox" id="agreeTerms" asp-for="Registration.AgreeTermsOfService" >
+							<label for="agreeTerms">
+								I agree to the <a href="/Terms">terms</a>
+							</label>
+						</div>
+			<span asp-validation-for="Registration.AgreeTermsOfService" class="text-danger"></span>
+		</div>
+					<!-- /.col -->
+					<div class="col-4">
+						<button type="submit" class="btn btn-success btn-block">Register</button>
+					</div>
+					<!-- /.col -->
+				</div>
+				
+			</form>
+		

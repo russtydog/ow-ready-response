@@ -1,0 +1,18 @@
+﻿@page "/applicationname"
+
+<input type="hidden" id="txtApplicationName" value="@AppName" />
+<title>@AppName | @PageTitle</title>
+@code {
+    [Inject]
+    private MyEF2.DAL.Services.SettingService settingService { get; set; }
+    private string AppName { get; set; }
+
+    [Parameter]
+    public string PageTitle { get; set; }
+
+    protected override void OnInitialized()
+    {
+        AppName = settingService.GetSettings().ApplicationName;
+
+    }
+}

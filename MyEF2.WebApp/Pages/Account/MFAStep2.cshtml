@@ -1,0 +1,38 @@
+﻿@page
+@model MyEF2.WebApp.Pages.Account.MFAStep2Model
+@{
+    ViewData["Title"] = "MFA Step 2";
+}
+<div class="col-md-4">
+    <!-- general form elements -->
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">MFA Step 2</h3>
+            <br />
+            <br />
+            <div>
+                Enter your one time code from Authenticator to validate
+            </div>
+        </div>
+        <!-- /.card-header -->
+        <!-- form start -->
+        <form method="post">
+            <div class="card-body">
+                <div asp-validation-summary="All" class="text-danger"></div>
+                <div class="form-group">
+                    <label>OTP Code</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" asp-for="OTPCode" />
+                        <button type="submit" class="btn btn-success" name="action" value="submit">Check</button>
+                    </div>
+                    <input type="hidden" asp-for="MFASecret" />
+                    
+                </div>
+                
+            </div>
+        </form>
+
+        <!-- form end -->
+    </div>
+</div>
+<!-- /.card -->

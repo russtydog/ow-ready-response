@@ -1,0 +1,74 @@
+﻿@page
+@model MyEF2.WebApp.Pages.Product.IndexModel
+@{
+    ViewData["Title"] = "Products";
+}
+
+
+<div class="col-md-12" style="text-align: left;">
+    <a href="/Products/Product" class="btn btn-success">Create</a>
+
+</div>
+<br>
+<br>
+<div class="col-md-12">
+	<div class="card">
+		<div class="card-header">
+			<h3 class="card-title">Products</h3>
+		</div>
+		<!-- /.card-header -->
+		<div class="card-body">
+			<table class="table table-bordered table-striped" id=tblProducts>
+				<thead>
+					<tr>
+						<th>Product</th>
+						<th>Date Created</th>
+						<th>Date Modified</th>
+						<th>Price</th>
+						<th>Status</th>
+						<th>Created By</th>
+						<th>Modified By</th>
+						<th>Action</th>
+					</tr>
+
+				</thead>
+				<tbody>
+					@if (Model.Products != null)
+					{
+						foreach (var product in Model.Products)
+						{
+							<tr>
+								<td><a asp-page="Product" asp-route-id="@product.Id">@product.ProductName</a></td>
+								<td><a asp-page="Product" asp-route-id="@product.Id">@Model.LocalDate(product.CreatedDate).ToString("yyyy-MM-dd hh:mm:ss tt")</a></td>
+								<td><a asp-page="Product" asp-route-id="@product.Id">@Model.LocalDate(product.ModifiedDate).ToString("yyyy-MM-dd hh:mm:ss tt")</a></td>
+								<td><a asp-page="Product" asp-route-id="@product.Id">$@product.Price.ToString("N2")</a></td>
+								<td><a asp-page="Product" asp-route-id="@product.Id">@product.Status.StatusName</a></td>
+								<td><a asp-page="Product" asp-route-id="@product.Id">@product.CreatedBy.FirstName @product.CreatedBy.LastName</a></td>
+								<td><a asp-page="Product" asp-route-id="@product.Id">@product.ModifiedBy.FirstName @product.ModifiedBy.LastName</a></td>
+								<td>
+									<a title="Edit" asp-page="Product" asp-route-id="@product.Id"><i class="fas fa-edit"></i></a>
+
+								</td>
+							</tr>
+						}
+					}
+				</tbody>
+			</table>
+		</div>
+	</div>
+
+</div>
+
+
+@section PageScripts
+{
+    
+    <script>
+        $(function () {
+            $("#tblProducts").DataTable({
+            "responsive": true, "lengthChange": false, "autoWidth": true,
+            "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+            }).buttons().container().appendTo('#tblProducts_wrapper .col-md-6:eq(0)');
+        });
+    </script>
+}

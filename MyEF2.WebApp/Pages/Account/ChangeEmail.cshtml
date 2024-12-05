@@ -1,0 +1,41 @@
+﻿@page
+@model MyEF2.WebApp.Pages.Account.ChangeEmailModel
+@{
+
+}
+
+<div class="col-md-6">
+    <!-- general form elements -->
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Change Email</h3>
+        </div>
+        <!-- /.card-header -->
+        <!-- form start -->
+        <form method="post" enctype="multipart/form-data">
+            <div class="card-body">
+                <div asp-validation-summary="All" class="text-danger"></div>
+                <div class="form-group">
+                    <label for="txtPassword" asp-for="Password">Password</label>
+                    <input type="password" asp-for="Password" class="form-control" id="txtPassword" placeholder="Password">
+                </div>
+                <div class="form-group">
+                    <label for="txtEmail" asp-for="Email">New Email</label>
+                    <input type="email" asp-for="Email" class="form-control" id="txtEmail" placeholder="New Email">
+                </div>
+                <div class="form-group">
+                    <label for="txtConfirmEmail" asp-for="ConfirmEmail">Confirm Email</label>
+                    <input type="email" asp-for="ConfirmEmail" class="form-control" id="txtConfirmEmail" placeholder="Confirm Email">
+                </div>
+            </div>
+            <div class="card-footer">
+                <br>
+                <button type="submit" class="btn btn-success" name="action" value="submit">Change Email</button>
+
+
+            </div>
+        </form>
+        <!-- form end -->
+    </div>
+</div>
+<!-- /.card -->

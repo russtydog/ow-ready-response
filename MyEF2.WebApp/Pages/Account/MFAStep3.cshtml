@@ -1,0 +1,36 @@
+﻿@page
+@model MyEF2.WebApp.Pages.Account.MFAStep3Model
+@{
+    ViewData["Title"] = "MFA Step 3";
+}
+
+<div class="col-md-4">
+    <!-- general form elements -->
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">MFA Step 3</h3>
+            <br />
+            <br />
+            <div>
+                Your MFA Code was accepted. Click complete
+            </div>
+        </div>
+        <!-- /.card-header -->
+        <!-- form start -->
+        <form method="post">
+            <div class="card-body">
+                <div asp-validation-summary="All" class="text-danger"></div>
+                
+                <div class="card-footer">
+                    <br>
+                    <button type="submit" class="btn btn-success" name="action" value="submit">Complete</button>
+
+
+                </div>
+            </div>
+        </form>
+
+        <!-- form end -->
+    </div>
+</div>
+<!-- /.card -->

@@ -1,0 +1,28 @@
+﻿@page
+@model ErrorModel
+@{
+    ViewData["Title"] = "Error";
+    Layout = "_GeneralWideBlockLayout";
+
+}
+
+<!-- Main content -->
+<section class="content col-md-12">
+    <div class="error-page">
+    <h2 class="headline text-danger">500</h2>
+
+    <div class="error-content">
+        <h3><i class="fas fa-exclamation-triangle text-danger"></i> Oops! Something went wrong.</h3>
+
+        <p>
+        An error has occurred and this operation cannot be completed. This has been recorded in our event logs and will be investigated.  Please try again later.
+        Meanwhile, you may <a href="/Dashboard">return to dashboard</a>.
+        </p>
+
+        
+    </div>
+    </div>
+    <!-- /.error-page -->
+
+</section>
+<!-- /.content -->

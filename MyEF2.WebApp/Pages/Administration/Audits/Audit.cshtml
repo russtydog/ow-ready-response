@@ -1,0 +1,61 @@
+﻿@page "/Administration/Audits/Audit/{id?}"
+@model MyEF2.WebApp.Pages.Administration.Audits.AuditModel
+@{
+    ViewData["Title"] = "Audit Details";
+}
+<div class="col-md-12">
+    <!-- general form elements -->
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Audit Details</h3>
+        </div>
+        <!-- /.card-header -->
+        <!-- form start -->
+        <form method="post">
+            <div class="card-body">
+                <div asp-validation-summary="All" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="Audit.Date">Date</label>
+                    <input type="text" asp-for="Audit.Date" class="form-control" id="txtAuditDate" placeholder="Audit Date" readonly="readonly">
+                </div>
+                <div class="form-group">
+                    <label asp-for="Audit.Action">Action</label>
+                    <input type="text" asp-for="Audit.Action" class="form-control" id="txtAuditAction" placeholder="Audit Action" readonly="readonly">
+                </div>
+                <div class="form-group">
+                    <label asp-for="Audit.UserName">UserName</label>
+                    <input type="text" asp-for="Audit.UserName" class="form-control" id="txtUserName" placeholder="User Name" readonly="readonly">
+                </div>
+                <div class="form-group">
+                    <label asp-for="Audit.EntityName">Entity Name</label>
+                    <input type="text" asp-for="Audit.EntityName" class="form-control" id="txtEntityName" placeholder="Entity Name" readonly="readonly">
+                </div>
+                <div class="form-group">
+                    <label asp-for="Audit.PropertyName">Property Name</label>
+                    <input type="text" asp-for="Audit.PropertyName" class="form-control" id="txtPropertyName" placeholder="Property Name" readonly="readonly">
+                </div>
+                <div class="form-group">
+                    <label asp-for="Audit.OldValue">Old Value</label>
+                    <input type="text" asp-for="Audit.OldValue" class="form-control" id="txtOldValue" placeholder="Old Value" readonly="readonly">
+                </div>
+                <div class="form-group">
+                    <label asp-for="Audit.NewValue">New Value</label>
+                    <input type="text" asp-for="Audit.NewValue" class="form-control" id="txtNewValue" placeholder="New Value" readonly="readonly">
+                </div>
+                <div class="form-group">
+                    <label asp-for="Audit.EntityId">Entity Id</label>
+                    <input type="text" asp-for="Audit.EntityId" class="form-control" id="txtEntityId" placeholder="Entity Id" readonly="readonly">
+                </div>
+            </div>
+            <div class="card-footer">
+                <br>
+                
+                
+                <a class="btn btn-default" href="/Administration/Audits">Back</a>
+            </div>
+        </form>
+
+        <!-- form end -->
+    </div>
+</div>
+<!-- /.card -->

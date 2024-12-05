@@ -1,0 +1,53 @@
+version: '3.8'
+
+networks:
+  myef2:
+    driver: bridge
+volumes:
+  uploads:
+services:
+  sql-server:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=your(!)StrongPassword
+      - MSSQL_PID=Express
+    ports:
+      - 1434:1433
+    volumes:
+      - ./data:/var/opt/mssql/data
+    networks:
+      - myef2
+
+  myef2:
+    image: ghcr.io/russtydog/myef2/myef2:latest
+    depends_on:
+      - sql-server
+    environment:
+        - ConnectionStrings__Default=Server=sql-server;Database=MyEF2;User=MyEF2User;Password=your(!)StrongPassword;TrustServerCertificate=true
+        - ASPNETCORE_URLS=http://+:80
+    ports:
+      - 8081:80
+    volumes:
+      - ./data:/app/wwwroot/uploads
+    # build: 
+    #   context: .
+    #   dockerfile: Dockerfile
+    container_name: myef2
+    networks:
+      - myef2
+
+  myef2api:
+    image: ghcr.io/russtydog/myef2api/myef2api:latest
+    depends_on:
+      - sql-server
+    environment:
+        - ConnectionStrings__Default=Server=sql-server;Database=MyEF2;User=MyEF2User;Password=your(!)StrongPassword;TrustServerCertificate=true
+        - ASPNETCORE_URLS=http://+:80
+    ports:
+      - 8082:80
+    volumes:
+      - ./data:/app/wwwroot/uploads
+    container_name: myef2api
+    networks:
+      - myef2

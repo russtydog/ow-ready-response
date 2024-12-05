@@ -1,0 +1,57 @@
+﻿@page "/darkmodecheck"
+
+<label id="lblMode" style="display:none">@DarkModeCSS</label>
+
+<script>
+    // Check if system theme is dark
+    var systemThemeIsDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+    // Set the initial value of SelectedTheme and DarkModeCSS
+    var selectedTheme = @SelectedTheme;
+    var darkModeCSS = "";
+
+    if (selectedTheme == 1) {
+        darkModeCSS = "dark-mode";
+        document.getElementById("lblMode").innerHTML = "dark-mode";
+    } else if (selectedTheme == 2 && systemThemeIsDark) {
+        darkModeCSS = "dark-mode";
+        document.getElementById("lblMode").innerHTML = "dark-mode";
+    }
+
+    // Use darkModeCSS as needed in your JavaScript logic
+
+    console.log('Dark mode CSS:', darkModeCSS);
+</script>
+
+@code {
+    [Inject]
+    private MyEF2.DAL.Services.UserService userService { get; set; }
+
+    private MyEF2.DAL.Entities.User user { get; set; }
+
+    [Parameter]
+    public string UserName { get; set; }
+
+    public string DarkModeCSS { get; set; }
+
+    private bool SystemThemeIsDark { get; set; }
+    private int SelectedTheme { get; set; }
+
+    protected override void OnParametersSet()
+    {
+        if (UserName != "")
+        {
+            user = userService.GetUserByAuthId(UserName);
+            SelectedTheme = user.DisplayTheme;
+
+            if (SelectedTheme == 0)
+            {
+                DarkModeCSS = "";
+            }
+        }
+        else
+        {
+            DarkModeCSS = "";
+        }
+    }
+}

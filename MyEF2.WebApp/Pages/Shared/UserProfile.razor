@@ -1,0 +1,69 @@
+﻿@page "/userprofile"
+@code{
+    
+
+    [Inject]
+    private MyEF2.DAL.Services.UserService userService{ get; set; }
+
+    private MyEF2.DAL.Entities.User user { get; set; }
+
+    [Parameter]
+    public string UserName { get; set; }
+
+    
+}
+
+<a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">
+    <img src="/uploads/@user.Profile" class="user-image img-circle elevation-2" alt="User Image">
+    <span class="d-none d-md-inline">@user.FirstName @user.LastName</span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+                        <!-- User image -->
+                        <li class="user-header bg-default bg-custom">
+                            <img src="/uploads/@user.Profile" class="img-circle elevation-2" alt="User Image">
+
+                            <p>
+                                @user.FirstName @user.LastName - (@user.Email)
+                                <small>Member since @user.DateCreated.ToString("MMM, yyyy")</small>
+                            </p>
+                        </li>
+                        <!-- Menu Body -->
+                        @*<li class="user-body">
+                            <div class="row">
+                                <div class="col-4 text-center">
+                                    <a href="#">Followers</a>
+                                </div>
+                                <div class="col-4 text-center">
+                                    <a href="#">Sales</a>
+                                </div>
+                                <div class="col-4 text-center">
+                                    <a href="#">Friends</a>
+                                </div>
+                            </div>
+                            <!-- /.row -->
+                        </li>*@
+                        <!-- Menu Footer-->
+                        <li class="user-footer">
+                            <a href="/Account/Profile" class="btn btn-default btn-flat">Profile</a>
+                            <a href="/Account/Logout" class="btn btn-default btn-flat float-right">Sign out</a>
+                        </li>
+                    </ul>
+
+@code{
+    
+	
+    protected override void OnParametersSet()
+	{
+        user = userService.GetUserByAuthId(UserName);
+
+        if (String.IsNullOrEmpty(user.Profile) || user.Profile == "")
+        {
+            user.Profile = "../dist/img/UserProfile.png";
+        }
+	}
+}
+
+
+
+
+

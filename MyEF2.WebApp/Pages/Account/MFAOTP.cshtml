@@ -1,0 +1,27 @@
+﻿@page 
+
+@model MyEF2.WebApp.Pages.Account.MFAOTPModel
+@{
+    Layout="_GeneralBlockLayout";
+    ViewData["Title"] = "MFA OTP";
+}
+<form method="post">
+	<div asp-validation-summary="All" class="text-danger"></div>
+    <div class="mb-3">
+        Enter your email address to have a one time password sent.
+    </div>
+    <div class="input-group mb-3">
+		<input type="email" class="form-control" placeholder="Email" asp-for="EmailAddress" />
+        <div class="input-group-append">
+            <div class="input-group-text">
+                <span class="fas fa-lock"></span>
+            </div>
+        </div>
+        <span asp-validation-for="EmailAddress" class="text-danger"></span>
+	</div>
+    
+	<div class="mb-3">
+        <button type="submit" class="btn btn-success btn-block">Send One Time Password</button>
+	</div>
+    
+</form>

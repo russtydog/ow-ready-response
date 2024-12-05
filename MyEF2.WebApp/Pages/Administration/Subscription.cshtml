@@ -1,0 +1,149 @@
+﻿@page
+@model MyEF2.WebApp.Pages.Administration.SubscriptionModel
+@{
+    ViewData["Title"] = "Subscription Details";
+}
+
+<div class="col-md-12">
+    <!-- general form elements -->
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Product Details</h3>
+        </div>
+        <!-- /.card-header -->
+        <!-- form start -->
+            <div class="card-body">
+                <div class="form-group">
+                    <label>Type</label>
+                    <input type="text" asp-for="MyStripeSubscription.Object" class="form-control" readonly="readonly" />
+                </div>
+                <div class="form-group">
+                    <label>Status</label>
+                    <input type="text" asp-for="MyStripeSubscription.Status" class="form-control" readonly="readonly" />
+                </div>
+                <div class="form-group">
+                    <label>Name</label>
+                    <input type="text" asp-for="StripeProduct.Name" class="form-control" readonly="readonly" />
+                </div>
+                <div class="form-group">
+                    <label>Created</label>
+                    <input type="text" asp-for="@Model.Created" class="form-control" readonly="readonly" />
+                </div>
+
+                <div class="form-group">
+                    <label>Plan Name</label>
+                    <input type="text" asp-for="MyStripeSubscription.Items.Data[0].Price.Nickname" class="form-control" readonly="readonly" />
+                </div>
+                <div class="form-group">
+                    <label>Currency</label>
+                    <input type="text" asp-for="MyStripeSubscription.Currency" class="form-control" readonly="readonly" />
+                </div>
+                <div class="form-group">
+                    <label>Current Period End</label>
+                    <input type="text" asp-for="@Model.CurrentPeriodEnd" class="form-control" readonly="readonly" />
+                </div>
+                <div class="form-group">
+                    <label>Price</label>
+                    <input type="text" asp-for="@Model.Price" class="form-control" readonly="readonly" />
+                </div>
+                <div class="form-group">
+                    <label>Interval</label>
+                    <input type="text" asp-for="MyStripeSubscription.Items.Data[0].Price.Recurring.Interval" class="form-control" readonly="readonly" />
+                </div>
+                @if(Model.MyStripeSubscription.CancelAtPeriodEnd){
+                    <div class="form-group">
+                        <label>Date Cancelled</label>
+                        <input type="text" asp-for="MyStripeSubscription.CanceledAt" class="form-control" readonly="readonly" />
+                    </div>
+                    <div class="form-group">
+                        <label>End of Period</label>
+                        <input type="text" asp-for="MyStripeSubscription.CancelAt" class="form-control" readonly="readonly" />
+                    </div>
+                    <div class="form-group">
+                        <label>Reason / Feedback</label>
+                        <input type="text" asp-for="MyStripeSubscription.CancellationDetails.Reason" class="form-control" readonly="readonly" />
+                        <input type="text" asp-for="MyStripeSubscription.CancellationDetails.Feedback" class="form-control" readonly="readonly" />
+                    </div>
+                }
+                <div style="border: 3px solid @Model.Setting.ActiveItemBackgroundColor;padding:10px;margin-bottom: 10px;">
+                    <div class="form-group">
+                        <label>Billing Customer Name</label>
+                        <input type="text" asp-for="@Model.MyStripeCustomer.Name" class="form-control" readonly="readonly" />
+                    </div>
+                    <div class="form-group">
+                        <label>Billing Customer Email</label>
+                        <input type="text" asp-for="@Model.MyStripeCustomer.Email" class="form-control" readonly="readonly" />
+                    </div>
+                    <div>
+                        <a class="btn btn-success" data-toggle="modal" data-target="#modal-changebiller">Change Billing Customer</a>
+                    @* <button type="button" class="btn btn-default" data-toggle="modal" data-target="#modal-delete"> *@
+
+                    </div>
+                </div>
+                <div>
+                    @* <a href="/Administration/Stripe/Products/Plans">Upgrade / Cancel</a> your subscription *@
+                    <a href="@Model.StripeCustomerPortalUrl?prefilled_email=@Model.MyStripeCustomer.Email" class="btn btn-success">Update / Cancel Subscription</a> 
+                    <i>Use this button to change your credit card, update or cancel your subscription</i>
+                </div>
+            </div>
+    </div>
+</div>
+
+<form method="post">
+<div class="modal fade" id="modal-changebiller">
+    <div class="modal-dialog modal-changebiller">
+    <div class="modal-content">
+        <div class="modal-header">
+        <h4 class="modal-title">Change Billing Customer</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <label>Select Biller</label>
+                <select asp-for="MyStripeCustomer.Id" class="form-control" id="drpBillingCustomer">
+                    <option value="">Select Biller</option>
+                    @foreach(var orgadmins in Model.OrgAdmins){
+                        <option value="@orgadmins.Id" data-name="@orgadmins.FirstName @orgadmins.LastName" data-email="@orgadmins.Email">@orgadmins.FirstName @orgadmins.LastName</option>
+                    }
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="txtBillingCustomerName">Billing Customer Name</label>
+                <input type="text" asp-for="UpdateBillerName" value="@Model.MyStripeCustomer.Name" class="form-control" id="txtBillingCustomerName" placeholder="Billing Customer Name" readonly>
+            </div>
+            <div class="form-group">
+                <label for="txtBillingCustomerEmail">Billing Customer Email</label>
+                <input type="text" asp-for="UpdateBillerEmail" value="@Model.MyStripeCustomer.Email" class="form-control" id="txtBillingCustomerEmail" placeholder="Billing Customer Email" readonly>
+            </div>
+        </div>
+        <div class="modal-footer justify-content-between">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-success" name="action" value="changebiller">Save</button>
+        </div>
+    </div>
+    <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+</form>
+@section PageScripts{
+    <script>
+        $(document).ready(function() {
+            $('#drpBillingCustomer').change(function() {
+                // Get the selected option
+                var selectedOption = $(this).find('option:selected');
+
+                // Get the data attributes from the selected option
+                var customerName = selectedOption.data('name');
+                var customerEmail = selectedOption.data('email');
+
+                // Set the values of the text inputs
+                $('#txtBillingCustomerName').val(customerName);
+                $('#txtBillingCustomerEmail').val(customerEmail);
+            });
+        });
+    </script>
+}

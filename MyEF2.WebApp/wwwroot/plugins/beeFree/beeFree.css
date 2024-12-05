@@ -1,0 +1,24 @@
+﻿    
+      * {
+        margin:0px;
+        padding:0px;
+      }
+      body {
+        overflow:hidden;
+        background-color: #CCCCCC;
+        color:#000000;
+      }
+      #bee-plugin-container {
+        position: absolute;
+        top:5px;
+        bottom:30px;
+        left:5px;
+        right:5px;
+      }
+      #integrator-bottom-bar {
+        position: absolute;
+        height: 25px;
+        bottom:0px;
+        left:5px;
+        right:0px;
+      }

@@ -1,0 +1,303 @@
+@page
+@model MyEF2.WebApp.Pages.Administration.Invoicing.IndexModel
+@{
+	ViewData["Title"] = "Invoices";
+}
+
+<div class="col-md-12">
+    <!-- general form elements -->
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Invoices</h3> &nbsp;<i class="fas fa-info-circle" title="Invoicing is powered by Stripe, these are the invoices linked to your customer identifier." style="cursor:help"></i>
+        </div>
+        <!-- /.card-header -->
+        <div class="card-body">
+            <table id="invoicesTable" style="width:100%">
+                <thead>
+                    <tr class="bottom-border">
+                        <th style="text-align:right;width:100px">Amount</th>
+                        <th style="width:40px"></th>
+                        <th style="width:40px"></th>
+                        <th style="width:200px">Invoice Number</th>
+                        <th style="width:100px">Due</th>
+                        <th style="width:100px">Created Date</th>
+                        <th style="width:20px"></th>
+                        <th style="width:20px"></th>
+                        <th style="border-bottom:0px"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Rows will be inserted here by JavaScript -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="col-md-12">
+    <!-- general form elements -->
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Upcoming Invoices</h3> &nbsp;<i class="fas fa-info-circle" title="Preview of upcoming invoices that will be billed subject adjustment for any additional excess consumption" style="cursor:help"></i>
+        </div>
+        <!-- /.card-header -->
+        <div class="card-body">
+            <table id="pendingInvoicesTable" style="width:100%">
+                <thead>
+                    <tr class="bottom-border">
+                        <th style="width:400px">Description</th>
+                        <th style="text-align:right;width:90px">QTY</th>
+                        <th style="text-align:right;width:100px">Unit Price</th>
+                        <th style="text-align:right;width:100px">Amount</th>
+
+                        <th style="border-bottom:0px"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Rows will be inserted here by JavaScript -->
+                </tbody>
+            </table>
+        </div>  
+    </div>
+</div>
+
+<style>
+.bottom-border th, .bottom-border td {
+    border-bottom: 1px solid #000; /* Adjust color and thickness as needed */
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+</style>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    try {
+        // Use Razor to output the JSON string in a safe manner
+        var jsonString = @Html.Raw(Model.InvoicesJson);
+       
+        // Parse the JSON string
+        var invoicesData = JSON.parse(jsonString).data;
+
+        var table = document.getElementById('invoicesTable');
+
+        invoicesData.forEach(function(invoice) {
+            var row = table.insertRow(-1);
+            row.classList.add("bottom-border");
+            
+            //cell0
+            var cell0 = row.insertCell(0);
+            cell0.textContent = "$" + (invoice.amount_due / 100).toFixed(2);
+            cell0.style.textAlign = "right";
+            
+            // Removed the duplicate insertion for the first cell
+            var cell1 = row.insertCell(1);
+            cell1.textContent = invoice.currency.toUpperCase();
+            var cell2 = row.insertCell(2);
+            cell2.textContent = invoice.paid ? "Paid" : "";
+            var cell3 = row.insertCell(3);
+            cell3.textContent = invoice.number;
+            var cell4 = row.insertCell(4);
+            cell4.textContent = invoice.due_date===null ? "---" : new Date(invoice.due_date * 1000).toLocaleDateString();
+            var createdDate = new Date(invoice.created * 1000);
+            var cell5 = row.insertCell(5);
+            cell5.textContent = createdDate.toLocaleDateString();
+            var cell6 = row.insertCell(6);
+            cell6.innerHTML = "<a href='" + invoice.invoice_pdf + "' target=_blank><i class='far fa-file-pdf'></i></a>";
+            var cell7 = row.insertCell(7);
+            cell7.innerHTML = "<a href='" + invoice.hosted_invoice_url + "' target=_blank><i class='fas fa-eye'></i></a>";
+
+
+    });
+    } catch (e) {
+        console.error("Error parsing invoices JSON: ", e);
+        // Optionally, display a user-friendly message or handle the error as appropriate
+    }
+
+    try {
+        // Use Razor to output the JSON string in a safe manner
+        var jsonStringPending = @Html.Raw(Model.PendingInvoiceJson);
+        console.log(jsonStringPending);
+        // Parse the JSON string
+        var pendingInvoicesData = JSON.parse(jsonStringPending).lines.data;
+        var pendingInvoiceSummary = JSON.parse(jsonStringPending);
+
+        var table = document.getElementById('pendingInvoicesTable');
+
+        pendingInvoicesData.forEach(function(invoice) {
+            var row = table.insertRow(-1);
+            row.classList.add("bottom-border");
+            //cell0
+            var cell0 = row.insertCell(0);
+            var startDate = new Date(invoice.period.start * 1000);
+            var endDate = new Date(invoice.period.end * 1000);
+            var formattedStartDate = startDate.toLocaleDateString('en-GB', {
+                day: '2-digit', month: 'short', year: 'numeric'
+            }).toUpperCase();
+            var formattedEndDate = endDate.toLocaleDateString('en-GB', {
+                day: '2-digit', month: 'short', year: 'numeric'
+            }).toUpperCase();
+            cell0.textContent = formattedStartDate + " - " + formattedEndDate;
+            
+            var row2 = table.insertRow(-1);
+            row2.classList.add("bottom-border");
+
+            var cell1 = row2.insertCell(0);
+            cell1.textContent = invoice.description; 
+            var cell2 = row2.insertCell(1);
+            cell2.textContent = Number(invoice.quantity).toLocaleString('en-US', { minimumFractionDigits: 0,maximumFractionDigits: 2,});
+            cell2.style.textAlign = "right";
+            var cell3 = row2.insertCell(2);
+            cell3.textContent = "$" + Number((invoice.unit_amount_excluding_tax / 100).toFixed(2)).toLocaleString('en-US', { minimumFractionDigits: 2,maximumFractionDigits: 2,});
+            
+            cell3.style.textAlign = "right";
+
+            var cell4 = row2.insertCell(3);
+            cell4.textContent =             "$" + Number((invoice.amount / 100).toFixed(2)).toLocaleString('en-US', { minimumFractionDigits: 2,maximumFractionDigits: 2,});
+
+            cell4.style.textAlign = "right";
+
+        });
+
+        //now add the summary row
+
+        //subtotal
+        var row3 = table.insertRow(-1);
+        var cell5 = row3.insertCell(0);
+
+        var cell7 = row3.insertCell(1);
+        cell7.colSpan = 2;
+        cell7.textContent = "Subtotal: ";
+        cell7.style.textAlign = "right";
+
+        var cell8 = row3.insertCell(2);
+        cell8.textContent = "$" + Number((pendingInvoiceSummary.subtotal / 100).toFixed(2)).toLocaleString('en-US', { minimumFractionDigits: 2,maximumFractionDigits: 2,});
+        cell8.style.textAlign = "right";
+
+        //subtotal_excluding_tax
+        var row4 = table.insertRow(-1);
+        var cell9 = row4.insertCell(0);
+
+        var cell11 = row4.insertCell(1);
+        cell11.colSpan = 2;
+        cell11.textContent = "Total excluding tax: ";
+        cell11.style.textAlign = "right";
+
+        var cell12 = row4.insertCell();
+        cell12.textContent = "$" + Number((pendingInvoiceSummary.subtotal_excluding_tax / 100).toFixed(2)).toLocaleString('en-US', { minimumFractionDigits: 2,maximumFractionDigits: 2,});
+        cell12.style.textAlign = "right";
+
+        //tax
+        var row5 = table.insertRow(-1);
+        var cell13 = row5.insertCell(0);
+
+        var cell15 = row5.insertCell(1);
+        cell15.colSpan = 2;
+        cell15.textContent = "Tax: ";
+        cell15.style.textAlign = "right";
+
+        var cell16 = row5.insertCell(2);
+        cell16.textContent = pendingInvoiceSummary.tax===null ? " ----" : "$" + Number((pendingInvoiceSummary.tax / 100).toFixed(2)).toLocaleString('en-US', { minimumFractionDigits: 2,maximumFractionDigits: 2,});
+        cell16.style.textAlign = "right";
+
+        //total
+        var row6 = table.insertRow(-1);
+        var cell17 = row6.insertCell(0);
+
+        var cell19 = row6.insertCell(1);
+        cell19.colSpan = 2;
+        cell19.textContent = "Total: ";
+        cell19.style.textAlign = "right";
+
+        var cell20 = row6.insertCell(2);
+        cell20.textContent = "$" + Number((pendingInvoiceSummary.total / 100).toFixed(2)).toLocaleString('en-US', { minimumFractionDigits: 2,maximumFractionDigits: 2,});
+        cell20.style.textAlign = "right";
+
+        //amount_due
+        var row7 = table.insertRow(-1);
+        var cell21 = row7.insertCell(0);
+
+        var cell23 = row7.insertCell(1);
+        cell23.colSpan = 2;
+        cell23.textContent = "Amount Due: ";
+        cell23.style.textAlign = "right";
+
+        var cell24 = row7.insertCell(2);
+        cell24.textContent = "$" + Number((pendingInvoiceSummary.amount_due / 100).toFixed(2)).toLocaleString('en-US', { minimumFractionDigits: 2,maximumFractionDigits: 2,});
+        cell24.style.textAlign = "right";
+
+    } catch (e) {
+        console.error("Error parsing invoices JSON: ", e);
+        // Optionally, display a user-friendly message or handle the error as appropriate
+    }
+});
+</script>
+
+@section PageScripts
+{
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/base/jquery-ui.css">
+  <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+  <script src="https://code.jquery.com/ui/1.13.3/jquery-ui.js"></script>
+  <script>
+  $( function() {
+    $( document ).tooltip({
+      position: {
+        my: "center bottom-20",
+        at: "center top",
+        using: function( position, feedback ) {
+          $( this ).css( position );
+          $( "<div>" )
+            .addClass( "arrow" )
+            .addClass( feedback.vertical )
+            .addClass( feedback.horizontal )
+            .appendTo( this );
+        }
+      }
+    });
+  } );
+  </script>
+  <style>
+  .ui-tooltip, .arrow:after {
+    background: black;
+    border: 2px solid white;
+  }
+  .ui-tooltip {
+    padding: 10px 20px;
+    color: white;
+    border-radius: 20px;
+    font: bold 14px "Helvetica Neue", Sans-Serif;
+    
+    box-shadow: 0 0 7px black;
+  }
+  .arrow {
+    width: 70px;
+    height: 16px;
+    overflow: hidden;
+    position: absolute;
+    left: 50%;
+    margin-left: -35px;
+    bottom: -16px;
+  }
+  .arrow.top {
+    top: -16px;
+    bottom: auto;
+  }
+  .arrow.left {
+    left: 20%;
+  }
+  .arrow:after {
+    content: "";
+    position: absolute;
+    left: 20px;
+    top: -20px;
+    width: 25px;
+    height: 25px;
+    box-shadow: 6px 5px 9px -9px black;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+  }
+  .arrow.top:after {
+    bottom: -20px;
+    top: auto;
+  }
+  </style>
+}

@@ -1,0 +1,25 @@
+﻿@page
+@model MyEF2.WebApp.Pages.Account.LoginEmailModel
+@{
+    Layout = "_LoginLayout";
+    ViewData["Title"] = "Login Email";
+
+}
+<form method="post">
+    <div asp-validation-summary="All" class="text-danger"></div>
+
+    <div class="input-group mb-3">
+        <input type="email" class="form-control" placeholder="Email" asp-for="@Model.Email" />
+        <div class="input-group-append">
+            <div class="input-group-text">
+                <span class="fas fa-envelope"></span>
+            </div>
+        </div>
+        <span asp-validation-for="@Model.Email" class="text-danger"></span>
+    </div>
+    
+    <div class="mb-3">
+        <button type="submit" class="btn btn-success btn-block">Login</button>
+    </div>
+</form>
+

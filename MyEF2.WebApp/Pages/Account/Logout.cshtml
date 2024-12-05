@@ -1,0 +1,21 @@
+﻿@page
+@model MyEF2.WebApp.Pages.Account.LogoutModel
+@{
+	Layout="_GeneralBlockLayout";
+    ViewData["Title"] = "Logout";
+}
+
+<form method="post">
+	<div asp-validation-summary="All" class="text-danger"></div>
+
+	<div class="input-group mb-3">
+		<div>
+			Are you sure you want to logout?
+		</div>
+	</div>
+	
+	<div class="mb-3">
+		<button class="btn btn-success" asp-page-handler="Logout">Yes</button>
+		<button class="btn btn-default" asp-page-handler="DontLogout">No</button>
+	</div>
+</form>

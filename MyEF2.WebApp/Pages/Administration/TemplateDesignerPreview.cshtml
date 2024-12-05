@@ -1,0 +1,41 @@
+﻿@page "/Administration/TemplateDesignerPreview/{id?}"
+@model MyEF2.WebApp.Pages.Administration.TemplateDesignerPreviewModel
+@{
+}
+<form method="post" style="width:100%">
+    <input ID="txtjSon" asp-for="NotificationTemplate.TemplateJson" type="hidden" />
+    <input ID="txtPreview" type="hidden" asp-for="NotificationTemplate.TemplateHTML" />
+    <div class="col-md-12">
+
+        <div style="float:left">
+            <!--left buttons-->
+            
+            <a href="../../Administration" class="btn btn-default">Back</a>
+        </div>
+        <div style="float:right">
+
+            <button type="submit" class="btn btn-success">Save</button>
+        </div>
+    </div>
+    <div style="width:500px;margin: auto;margin-top:69px">
+        
+    
+        <div id="divPreview"></div>
+    </div>
+</form>
+@section PageScripts{
+    <script>
+        $(document).ready(function () {
+            var prev = document.getElementById('txtPreview');
+            prev.value = localStorage.getItem("templateContent");
+
+            var json = document.getElementById('txtjSon');
+            json.value = localStorage.getItem("templateJson");
+
+
+            var divy = document.getElementById('divPreview');
+            divy.innerHTML = localStorage.getItem("templateContent");
+
+        });
+    </script>
+}

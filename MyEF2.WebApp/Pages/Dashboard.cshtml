@@ -1,0 +1,470 @@
+﻿@page
+@model MyEF2.WebApp.Pages.DashboardModel
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<div class="row justify-content-center" style="width:100%">
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-header border-0">
+                <div class="d-flex justify-content-between">
+                    <h3 class="card-title">Response Generator</h3>
+                    <a href="javascript:void(0);"></a>
+                </div>
+            </div>
+            <div class="card-body">
+                <div id="typing-effect"></div>
+                
+                <div id="upload-container" class="upload-container">
+                    <input type="file" id="fileInput" multiple hidden />
+                    <div id="drop-area" class="drop-area">
+                        <p>Drag & Drop files here or click to browse</p>
+                    </div>
+                    <progress id="progressBar" value="0" max="100" style="width: 100%;"></progress>
+                </div>
+                <table id="dataTable" class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>RequirementNo</th>
+                            <th>Category</th>
+                            <th>Question</th>
+                            <th>Response</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+                
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="modal fade" id="responseModal" tabindex="-1" role="dialog" aria-labelledby="responseModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="responseModalLabel">Edit Response</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <textarea id="responseEditor" style="width: 100%; height: 200px;"></textarea>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-success" id="saveResponse">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="scrollControl" style="">
+    <button id="resumeScroll" class="btn btn-success">
+        <i class="fas fa-arrow-down"></i> Resume Auto-Scroll
+    </button>
+</div>
+
+<button id="downloadButton" style="display:none" onclick="downloadSpreadsheet()">Download Spreadsheet</button>
+
+<form method="post">
+    @Html.AntiForgeryToken()
+</form>
+
+
+@section PageScripts {
+
+    <script>
+        function typeOutText(elementId, text, typingDelay, onComplete) {
+            let currentIndex = 0;
+            const element = document.getElementById(elementId);
+
+            function typeCharacter() {
+                if (currentIndex < text.length) {
+                    element.textContent += text.charAt(currentIndex);
+                    currentIndex++;
+                    setTimeout(typeCharacter, typingDelay);
+                } else if (onComplete) {
+                    onComplete(); // Call the callback function once typing is complete
+                }
+            }
+
+            typeCharacter();
+        }
+
+        // Usage
+        typeOutText("typing-effect", "Welcome to Ready Responses! Be prepared to be amazed at how much time you’ll save. Simply drag and drop your tender requirements spreadsheets into the section below. We’ll use your Ask AI knowledge base to answer each requirement, and then give you the opportunity to download the completed documents ready for submission. What are you going to do with all this free time?", 10, function() {
+            document.getElementById('divAssistantName').style.display = 'block'; // Make the element visible
+        });
+    </script>
+
+    <script src="https://cdn.ckeditor.com/ckeditor5/34.0.0/classic/ckeditor.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
+    <script>
+        const dropArea = document.getElementById('drop-area');
+        const fileInput = document.getElementById('fileInput');
+        const progressBar = document.getElementById('progressBar');
+        const dataTable = document.getElementById('dataTable').getElementsByTagName('tbody')[0];
+        const conversationId = '@Guid.NewGuid()';
+        const responseModal = new bootstrap.Modal(document.getElementById('responseModal'));
+        const scrollControl = document.getElementById('scrollControl');
+        const resumeScrollButton = document.getElementById('resumeScroll');
+        let currentRowIndex;
+        let editorInstance;
+        let autoScroll = true;
+        let isUserScrolling = false;
+        let scrollTimeout;
+        let programmaticScroll = false; // Flag to ignore programmatic scroll events
+
+        var systemThemeIsDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        var userTheme = @Model.CurrentUser.DisplayTheme;
+
+
+
+        ClassicEditor
+            .create(document.querySelector('#responseEditor'))
+            .then(editor => {
+                editorInstance = editor;
+
+                //if userTheme is systemThemeIsDark is true and userTheme is 2 then use dark mode, if userTheme is 1 then use dark mode
+                if (userTheme == 1 || (userTheme == 2 && systemThemeIsDark)) {
+                    editor.ui.view.editable.element.classList.add('dark-mode');
+                }
+
+
+
+            })
+            .catch(error => {
+                console.error(error);
+            });
+
+        dropArea.addEventListener('dragover', (event) => {
+            event.preventDefault();
+            dropArea.classList.add('dragging');
+        });
+
+        dropArea.addEventListener('dragleave', () => {
+            dropArea.classList.remove('dragging');
+        });
+
+        dropArea.addEventListener('drop', (event) => {
+            event.preventDefault();
+            dropArea.classList.remove('dragging');
+            const files = event.dataTransfer.files;
+            handleFiles(files);
+        });
+
+        dropArea.addEventListener('click', () => {
+            fileInput.click();
+        });
+
+        fileInput.addEventListener('change', () => {
+            const files = fileInput.files;
+            handleFiles(files);
+        });
+
+        async function processQuestionsSequentially() {
+            const rows = dataTable.rows;
+            for (let i = 0; i < rows.length; i++) {
+                const question = rows[i].cells[2].innerText; // Assuming the question is in the third cell
+                await startProcessingQuestion(question, i);
+            }
+        }
+
+        async function startProcessingQuestion(question, rowIndex) {
+            const url = '?handler=StartProcessingQuestion';
+            const model = {
+                question: question,
+                rowIndex: rowIndex,
+                conversationId: conversationId
+            };
+
+            console.log('Processing question in rowIndex', rowIndex);
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
+                    },
+                    body: JSON.stringify(model)
+                });
+                const data = await response.json();
+                if (data.messageId) {
+                    await pollForResponse(data.messageId, rowIndex);
+                } else {
+                    dataTable.rows[rowIndex].cells[3].innerHTML = 'No response';
+                }
+                checkResponses(); // Check responses after processing each question
+            } catch (error) {
+                console.error('Error:', error);
+                dataTable.rows[rowIndex].cells[3].innerHTML = 'Error';
+            }
+        }
+
+        async function pollForResponse(messageId, rowIndex) {
+            const url = `?handler=PollForResponse&messageId=${messageId}&rowIndex=${rowIndex}`;
+            console.log('Polling for response on messageId:', messageId);
+            try {
+                let complete = false;
+                while (!complete) {
+                    const response = await fetch(url, {
+                        method: 'GET',
+                        headers: {
+                            'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
+                        }
+                    });
+                    const data = await response.json();
+                    const row = dataTable.rows[rowIndex];
+                    if (autoScroll) {
+                        scrollToRow(row); // Programmatically scroll
+                    }
+                    if (data.streamStatus === 'Complete') {
+                        row.cells[3].innerHTML = data.messageStream;
+                        row.classList.remove('row-in-progress');
+                        row.classList.add('row-complete');
+                        complete = true;
+                    } else {
+                        row.cells[3].innerHTML = data.messageStream;
+                        row.classList.add('row-in-progress');
+                        await new Promise(resolve => setTimeout(resolve, 1000)); // Poll every 1 second
+                    }
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                const row = dataTable.rows[rowIndex];
+                row.cells[3].innerHTML = 'Error';
+                row.classList.remove('row-in-progress');
+            }
+        }
+
+        function scrollToRow(row) {
+            programmaticScroll = true; // Set flag to ignore this scroll event
+            row.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            setTimeout(() => {
+                programmaticScroll = false; // Reset after programmatic scrolling
+            }, 500); // Short timeout
+        }
+
+        // Detect user scroll
+        function handleScroll() {
+            if (programmaticScroll) {
+                // Ignore scroll events triggered programmatically
+                return;
+            }
+
+            if (!isUserScrolling) {
+                isUserScrolling = true;
+                autoScroll = false; // Disable auto-scroll on user interaction
+                scrollControl.style.display = 'block'; // Show resume button
+            }
+
+            clearTimeout(scrollTimeout);
+            scrollTimeout = setTimeout(() => {
+                isUserScrolling = false;
+            }, 2000); // Reset after user stops scrolling
+        }
+
+        window.addEventListener('wheel', () => {
+            if (!programmaticScroll) {
+                autoScroll = false; // Stop auto-scroll on user interaction
+                handleScroll();
+            }
+        });
+
+        window.addEventListener('scroll', () => {
+            if (!programmaticScroll) {
+                autoScroll = false; // Stop auto-scroll on user interaction
+                handleScroll();
+            }
+        });
+
+        // Resume auto-scroll
+        resumeScrollButton.addEventListener('click', () => {
+            autoScroll = true; // Re-enable auto-scroll
+            scrollControl.style.display = 'none'; // Hide resume button
+        });
+
+        function handleFiles(files) {
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                const data = new Uint8Array(event.target.result);
+                const workbook = XLSX.read(data, { type: 'array' });
+                const firstSheetName = workbook.SheetNames[0];
+                const worksheet = workbook.Sheets[firstSheetName];
+                const json = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+                populateTable(json);
+
+                // Upload the file to the server
+                const formData = new FormData();
+                formData.append('file', files[0]);
+
+                fetch('?handler=UploadFile', {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        console.log('File uploaded successfully:', data);
+                    } else {
+                        console.error('File upload failed:', data);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error uploading file:', error);
+                });
+            };
+            reader.readAsArrayBuffer(files[0]);
+        }
+
+        function populateTable(data) {
+            dataTable.innerHTML = '';
+            data.slice(1).forEach((row, rowIndex) => { // Exclude the first row
+                const tr = document.createElement('tr');
+                row.forEach((cell, cellIndex) => {
+                    const td = document.createElement('td');
+                    td.innerText = cell;
+                    tr.appendChild(td);
+                });
+                const responseCell = document.createElement('td');
+                responseCell.innerHTML = 'Pending';
+                responseCell.classList.add('response-cell'); // Add the response-cell class
+                responseCell.addEventListener('click', () => editResponse(rowIndex));
+                tr.appendChild(responseCell);
+                dataTable.appendChild(tr);
+            });
+            processQuestionsSequentially(); // Start processing after table population
+            checkResponses(); // Check responses after populating the table
+        }
+
+        function editResponse(rowIndex) {
+            currentRowIndex = rowIndex;
+            const row = dataTable.rows[rowIndex];
+            editorInstance.setData(row.cells[3].innerHTML);
+            responseModal.show();
+        }
+
+        document.getElementById('saveResponse').addEventListener('click', () => {
+            const row = dataTable.rows[currentRowIndex];
+            row.cells[3].innerHTML = editorInstance.getData();
+            responseModal.hide();
+        });
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script>
+    <link href="https://cdn.ckeditor.com/ckeditor5/34.0.0/classic/ckeditor.css" rel="stylesheet">
+
+    <style>
+        .upload-container {
+            text-align: center;
+            padding: 20px;
+            border: 2px dashed #ccc;
+            border-radius: 10px;
+        }
+
+        .drop-area {
+            padding: 20px;
+            border: 2px dashed #ccc;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        .drop-area.dragging {
+            border-color: #000;
+        }
+
+        .row-complete {
+            border: 2px solid green;
+        }
+
+        .row-in-progress {
+            border: 2px solid orange;
+        }
+
+        .modal-lg {
+            max-width: 80%; /* Adjust the percentage as needed */
+        }
+
+        #scrollControl {
+            position: fixed;
+            bottom: 70px; /* Adjusted position */
+            right: 20px;
+            display: none;
+        }
+    </style>
+
+    <script>
+    function checkResponses() {
+        // Check if all responses are populated
+        let allPopulated = true;
+        document.querySelectorAll('.response-cell').forEach(cell => {
+            if (cell.innerHTML === 'Pending') {
+                allPopulated = false;
+            }
+        });
+
+        // Show the button if all responses are populated
+        if (allPopulated) {
+            document.getElementById('downloadButton').style.display = 'block';
+        } else {
+            document.getElementById('downloadButton').style.display = 'none';
+        }
+    }
+    
+
+    function downloadSpreadsheet() {
+    // Collect responses from the table
+    let responses = [];
+    const responseCells = document.querySelectorAll('.response-cell');
+
+    // Log the selected elements to ensure they are being correctly selected
+    console.log('Selected response cells:', responseCells);
+
+    responseCells.forEach(cell => {
+        // Replace double quotes with single quotes and strip out newline characters
+        let cleanedResponse = cell.innerHTML.replace(/"/g, "'").replace(/(\r\n|\n|\r)/gm, "");
+        responses.push(cleanedResponse);
+    });
+
+    // Log the collected responses to ensure they are not empty
+    console.log('Collected responses:', responses);
+
+    // Stringify the responses
+    const jsonString = JSON.stringify({ responses: responses });
+
+    // Log the JSON string to ensure it is correctly formatted
+    console.log('JSON string:', jsonString);
+
+    // Save responses to the server using jQuery's $.ajax
+    $.ajax({
+        url: '?handler=SaveResponses',
+        type: 'POST',
+        contentType: 'application/json',
+        headers: {
+            'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
+        },
+        data: jsonString,
+        success: function(data) {
+            if (data.success) {
+                console.log('Responses saved successfully:', data);
+
+                // Proceed with the download
+                window.location.href = '?handler=DownloadSpreadsheet';
+            } else {
+                console.error('Failed to save responses:', data);
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error('Error saving responses:', error);
+        }
+    });
+}
+</script>
+}

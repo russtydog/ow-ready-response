@@ -1,0 +1,263 @@
+﻿@page
+@model MyEF2.WebApp.Pages.Administration.OrganisationModel
+@{
+	ViewData["Title"] = "Organisation Administration";
+}
+<form method="post" enctype="multipart/form-data" style="width:100%">
+
+<div class="col-12 col-sm-6">
+	<div class="card card-success card-outline card-tabs">
+		<div class=" p-0 pt-1 border-bottom-0">
+		<ul class="nav nav-tabs" id="tabs-tab" role="tablist">
+			<li class="nav-item">
+			<a class="nav-link active" id="tabs-orgsettings-tab" data-toggle="pill" href="#tabs-orgsettings" role="tab" aria-controls="tabs-orgsettings" aria-selected="true">Organisation Settings</a>
+			</li>
+			<li class="nav-item">
+			<a class="nav-link" id="tabs-adminportalusers-tab" data-toggle="pill" href="#tabs-adminportalusers" role="tab" aria-controls="tabs-adminportalusers" aria-selected="false">Admin Portal Users </a> 
+			</li>
+			<li class="nav-item">
+			<a class="nav-link" id="tabs-adminportalsso-tab" data-toggle="pill" href="#tabs-adminportalsso" role="tab" aria-controls="tabs-adminportalsso" aria-selected="false">Admin Portal SSO</a>
+			</li>
+			<li class="nav-item">
+			<a class="nav-link" id="tabs-askaiapi-tab" data-toggle="pill" href="#tabs-askaiapi" role="tab" aria-controls="tabs-askaiapi" aria-selected="false">Ask AI API</a>
+			</li>
+			@if(Model.EnableStripeForOrgs)
+			{
+				<li class="nav-item">
+					<a class="nav-link" id="tabs-subscription-tab" data-toggle="pill" href="#tabs-subscription" role="tab" aria-controls="tabs-subscription" aria-selected="false">Subscription</a>
+				</li>
+			}
+		</ul>
+		</div>
+		<div class="card-body">
+		<div class="tab-content" id="tabs-tabContent">
+			<div class="tab-pane fade show active" id="tabs-orgsettings" role="tabpanel" aria-labelledby="tabs-orgsettings-tab">
+
+				<div class="col-md-12">
+					<!-- general form elements -->
+					<div class="card">
+						<div class="card-header">
+							<h3 class="card-title">Organisation Settings</h3>
+						</div>
+						<!-- /.card-header -->
+						<!-- form start -->
+						
+							<div class="card-body">
+								<div asp-validation-summary="All" class="text-danger"></div>
+								<input type="hidden" asp-for="Organisation.Id" />
+								<div class="form-group">
+									<label for="txtOrganisationName" asp-for="Organisation.OrganisationName">Organisation Name</label>
+									<input type="text" asp-for="Organisation.OrganisationName" class="form-control" id="txtOrganisationName" placeholder="Organisation Name">
+								</div>
+								<div class="form-group">
+									<label for="txtABN" asp-for="Organisation.ABN">ABN</label>
+									<input type="text" asp-for="Organisation.ABN" class="form-control" id="txtABN" placeholder="ABN">
+								</div>
+								<div class="form-group">
+									<label for="chkEnforceMFA" asp-for="Organisation.EnforceMFA">Enforce MFA</label>
+									<input type="checkbox" class="form-control" data-toggle="toggle" style="width:40px" asp-for="Organisation.EnforceMFA">
+
+								</div>
+								
+								
+							</div>
+							
+					</div>
+				</div>
+			</div>
+			<div class="tab-pane fade" id="tabs-adminportalusers" role="tabpanel" aria-labelledby="tabs-adminportalusers-tab">
+
+				<div class="card">
+					<div class="card-header">
+						<h3 class="card-title">Admin Portal Users</h3>&nbsp;&nbsp;<i class="fas fa-info-circle" title="Manage users who have access to the AskAI Admin Portal."></i>
+					</div>
+					<div class="col-md-12" style="text-align: right;">
+						<br>
+						<a href="OrganisationUser" class="btn btn-success">Create</a>
+
+					</div>
+					<!-- /.card-header -->
+					<div class="card-body">
+						<table class="table table-bordered table-striped" id=tblUsers>
+							<thead>
+								<tr>
+									<th>First Name</th>
+									<th>Last Name</th>
+									<th>Email</th>
+									<th>Action</th>
+								</tr>
+
+							</thead>
+							<tbody>
+								@if (Model.Users != null)
+								{
+									foreach (var user in Model.Users)
+									{
+										<tr>
+											<td><a asp-page="OrganisationUser" asp-route-id="@user.Id">@user.FirstName</a></td>
+											<td><a asp-page="OrganisationUser" asp-route-id="@user.Id">@user.LastName</a></td>
+											<td><a asp-page="OrganisationUser" asp-route-id="@user.Id">@user.Email</a></td>
+											<td>
+												<a title="Edit" asp-page="OrganisationUser" asp-route-id="@user.Id"><i class="fas fa-edit"></i></a>
+
+											</td>
+										</tr>
+									}
+								}
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+			<div class="tab-pane fade" id="tabs-adminportalsso" role="tabpanel" aria-labelledby="tabs-adminportalsso-tab">
+				<div class="col-md-12">
+					<!-- general form elements -->
+					<div class="card">
+						<div class="card-header">
+							<h3 class="card-title">SSO Settings</h3>
+						</div>
+						<!-- /.card-header -->
+						<!-- form start -->
+						
+						<div class="card-body">
+							@if(Model.OrganisationSSOEnabled)
+								{
+									<div class="form-group">
+										<label for="chkSSOEnabled" asp-for="Organisation.EnableSSO">SSO Enabled</label>
+										<input type="checkbox" class="form-control" data-toggle="toggle" style="width:40px" asp-for="Organisation.EnableSSO">
+									</div>
+									<div class="form-group">
+										<label for="chkSSOEnabled" asp-for="Organisation.EnableAutoSSORegistration">Enable Auto SSO Registration (Use Reply URL for invitations)</label>
+										<input type="checkbox" class="form-control" data-toggle="toggle" style="width:40px" asp-for="Organisation.EnableAutoSSORegistration">
+									</div>
+									<div class="form-group">
+										<label for="chkSSOEnabled" asp-for="Organisation.SkipEmailVerification">Skip Email Verification on Auto Create?</label>
+										<input type="checkbox" class="form-control" data-toggle="toggle" style="width:40px" asp-for="Organisation.SkipEmailVerification">
+									</div>
+									<div class="form-group"> 
+										<label asp-for="Organisation.EmailDomainMask">Email Domain Mask (Required if Skipping Email Verification)</label>
+										<input type="text" asp-for="Organisation.EmailDomainMask" class="form-control" id="txtEmailDomainMask" placeholder="Email Domain Mask eg *@@domain.com ">
+									</div>
+									<div class="form-group">
+										<label for="chkSSOEnabled" asp-for="Organisation.EnableSSO">
+											Reply URL (Assertion Consumer Service URL)
+										</label>
+										<input type="text" value="@Model.ReplyUrl" class="form-control" id="txtReplyUrl" placeholder="Reply URL" readonly="readonly">
+
+									</div>
+									<div class="form-group">
+										<label for="chkEntityId" asp-for="Organisation.EntityID">Entity Id</label>
+										<input type="text" asp-for="Organisation.EntityID" class="form-control" id="txtEntityId" placeholder="Entity Id" >
+									</div>
+									<div class="form-group">
+										<label for="LoginUrl" asp-for="Organisation.LoginURL">Login URL</label>
+										<input type="text" asp-for="Organisation.LoginURL" class="form-control" id="txtLoginUrl" placeholder="Login URL">
+									</div>
+									<div class="form-group">
+										<label for="Certificate" asp-for="Organisation.SigningCertificate">Signing Certificate</label>
+										<textarea asp-for="Organisation.SigningCertificate" class="form-control" rows="3" placeholder="Signing Certificate"></textarea>
+									</div>
+								}
+						</div>
+					</div>
+				</div>
+			</div>
+			@if(Model.EnableStripeForOrgs)
+			{
+				<div class="tab-pane fade" id="tabs-subscription" role="tabpanel" aria-labelledby="tabs-subscription-tab">
+					<div class="col-md-12">
+						<!-- general form elements -->
+						<div class="card">
+							<div class="card-header">
+								<h3 class="card-title">Subscription</h3>
+							</div>
+							<!-- /.card-header -->
+							<!-- form start -->
+							
+							<div class="card-body">
+								@if(Model.EnableStripeForOrgs)
+								{
+									<div class="form-group">
+										<label>Subscription Plan:</label>
+
+
+										<label class="form-control">@Model.SelectedPlan</label>
+										@if(Model.SelectedPlan != null)
+										{
+											<a href="Subscription">View Subscription</a>
+										}
+									</div>
+
+								}
+							</div>
+						</div>
+					</div>
+				</div>
+			}
+			<div class="tab-pane fade" id="tabs-askaiapi" role="tabpanel" aria-labelledby="tabs-askaiapi-tab">
+				<div class="col-md-12">
+					<!-- general form elements -->
+					<div class="card">
+						<div class="card-header">
+							<h3 class="card-title">Ask AI Settings</h3>
+						</div>
+						<!-- /.card-header -->
+						<!-- form start -->
+						
+						<div class="card-body">
+							
+									<div class="form-group">
+										<label for="chkSSOEnabled" asp-for="Organisation.EnableSSO">AskAI AI API</label>
+										<input type="url" class="form-control" asp-for="Organisation.AskAIAPI">
+									</div>
+									<div class="form-group">
+										<label for="chkSSOEnabled" asp-for="Organisation.EnableAutoSSORegistration">API Key</label>
+										<input type="text" class="form-control"  asp-for="Organisation.AskAIAPIKey">
+									</div>
+									<div class="form-group">
+										<label for="chkSSOEnabled" >Assistant Id</label>
+										<input type="text" class="form-control" asp-for="Organisation.AskAIAssistantId">
+									</div>
+								
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="card-footer">
+		<br>
+		<button type="submit" class="btn btn-success" name="action" value="submit">Save</button>
+		
+	</div>
+</form>
+@section PageScripts
+	{
+<script>
+	document.addEventListener("DOMContentLoaded", function() {
+		// Get the fragment identifier from the URL
+		var hash = window.location.hash;
+
+		// If there's a hash in the URL
+		if(hash) {
+			// Remove the 'show' and 'active' classes from the currently active tab and its content
+			$('.nav-link.active').removeClass('active');
+			$('.tab-pane.show.active').removeClass('show active');
+
+			// Add the 'active' class to the new tab and 'show active' to its content
+			$(`.nav-link[href="${hash}"]`).addClass('active');
+			$(`${hash}`).addClass('show active');
+		}
+	});
+	</script>
+
+	<script>
+		$(function () {
+			$("#tblUsers").DataTable({
+				"responsive": true, "lengthChange": true, "autoWidth": false, "width": "100%",
+				"buttons": ["excel", "colvis"]
+			}).buttons().container().appendTo('#tblUsers_wrapper .col-md-6:eq(0)');
+		});
+	</script>
+}

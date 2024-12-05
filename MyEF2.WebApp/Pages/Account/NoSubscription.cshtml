@@ -1,0 +1,17 @@
+@page "/Account/NoSubscription"
+@model MyEF2.WebApp.Pages.Account.NoSubscription
+@{
+	Layout = "_GeneralBlockLayout";
+    ViewData["Title"] = "No Subscription";
+}
+<div>
+    @if(string.IsNullOrEmpty(Model.UserModel.Organisation.SubscriptionPlan)){
+        <p>You don't currently have a subscription plan, please visit our <a href="/Pricing">Pricing</a> page to choose the plan which is right for you.</p>
+    }else{
+        <p>Your subscription is no longer active, please manage your subscription on our Stripe Customer Portal 
+        </p>
+        <div style="width:100%;text-align:center">
+            <a href="@Model.StripeCustomerPortalUrl?prefilled_email=@User.Identity.Name" class="btn btn-success">Manage Subscription</a> 
+        </div>
+    }
+</div>

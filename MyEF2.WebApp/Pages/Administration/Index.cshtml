@@ -1,0 +1,373 @@
+﻿@page
+@model MyEF2.WebApp.Pages.Administration.IndexModel
+@{
+	ViewData["Title"]="Administration";
+}
+<!-- summernote -->
+<link rel="stylesheet" href="../../../plugins/summernote/summernote-bs4.min.css">
+<script>
+    function showAlert() {
+        alert("Image has loaded!");
+        // Add your custom logic here
+    }
+    function SwitchPasswordView() {
+
+
+        var password = document.querySelector("#txtSMTPPassword");
+        var hiddenPassword = document.querySelector("#hiddenPassword");
+
+        const type = password.getAttribute("type") === "password" ? "text" : "password";
+        password.setAttribute("type", type);
+
+        password.value = hiddenPassword.value;
+    }
+</script>
+<img src="~/dist/img/Logo.png" style="display:none" onload="SwitchPasswordView()" />
+
+<div class="col-md-12">
+    <!-- general form elements -->
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Admin Settings</h3>
+        </div>
+        <!-- /.card-header -->
+        <!-- form start -->
+        <form method="post" enctype="multipart/form-data">
+            <div class="card-body">
+                <div asp-validation-summary="All" class="text-danger"></div>
+                
+                <div class="form-group">
+                    <label for="txtApplicationName" asp-for="Setting.ApplicationName">Application Name</label>
+                    <input type="text" asp-for="Setting.ApplicationName" class="form-control" id="txtApplicationName" placeholder="Application Name">
+                </div>
+				<div class="form-group">
+                    <label for="txtCompanyName" asp-for="Setting.CompanyName">Company Name</label>
+                    <input type="text" asp-for="Setting.CompanyName" class="form-control" id="txtCompanyName" placeholder="Company Name">
+                </div>
+                <div class="form-group">
+                    <label for="txtCompanyWebsite" asp-for="Setting.CompanyWebsite">Company Website</label>
+                    <input type="text" asp-for="Setting.CompanyWebsite" class="form-control" id="txtCompanyWebsite" placeholder="Company Website">
+                </div>
+				<div class="form-group">
+                    <label for="txtLogo" asp-for="Setting.Logo">Logo</label>
+                    <input type="hidden" asp-for="Setting.Logo" class="form-control" id="txtLogo" placeholder="Logo">
+                </div>
+                <div class="form-group">
+                    <input type="hidden" asp-for="Setting.Logo" />
+                    <div class="row">
+                        <div class="small-12 medium-2 large-2 columns">
+                            <div class="">
+                                <img alt="Profile" style="height:128px" class="profile-pic p-img" src="/dist/img/@Model.Setting.Logo">
+
+                            </div>
+                            <div class="p-image">
+                                <i class="fa fa-camera upload-button"></i>
+                                <input class="file-upload" type="file" asp-for="UploadFile" accept="image/*" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="txtAPIUrl" asp-for="Setting.APIUrl">API Url</label>
+                    <input type="url" asp-for="Setting.APIUrl" class="form-control" id="txtAPIUrl" placeholder="API Url">
+                </div>
+				<div class="form-group">
+                    <label for="txtSMTPServer" asp-for="Setting.SMTPServer">SMTP Server</label>
+                    <input type="text" asp-for="Setting.SMTPServer" class="form-control" id="txtSMTPServer" placeholder="SMTPServer">
+                </div>
+				<div class="form-group">
+                    <label for="txtSMTPUsername" asp-for="Setting.SMTPUsername">SMTP Username</label>
+                    <input type="text" asp-for="Setting.SMTPUsername" class="form-control" id="txtSMTPUsername" placeholder="SMTPUsername">
+                </div>
+				<div class="form-group">
+                    <label for="txtSMTPPassword" asp-for="Setting.SMTPPassword">SMTP Password</label>
+                    <div class="input-group">
+                        <input type="text" asp-for="Setting.SMTPPassword" class="form-control" id="txtSMTPPassword" placeholder="SMTPPassword" >
+                        
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <a href="#" onclick="SwitchPasswordView(); return false;"><span class="fas fa-eye"></span></a>
+                            </div>
+                        </div>
+                            
+                    </div>
+                </div>
+				<div class="form-group">
+                    <label for="txtSMTPPort" asp-for="Setting.SMTPPort">SMTP Port</label>
+                    <input type="number" asp-for="Setting.SMTPPort" class="form-control" id="txtSMTPPort" placeholder="SMTPPort">
+                </div>
+				<div class="form-group">
+                    <label for="chkSMTPSSL" asp-for="Setting.SMTPSSL">SMTP SSL</label>
+                    <input type="checkbox" asp-for="Setting.SMTPSSL" class="form-control" style="width:40px" id="chkSMTPSSL" placeholder="SMTPSSL">
+                </div>
+				<div class="form-group">
+                    <label for="txtSenderName" asp-for="Setting.SMTPSenderName">Sender Name</label>
+                    <input type="text" asp-for="Setting.SMTPSenderName" class="form-control" id="txtSenderName" placeholder="Sender Name">
+                </div>
+				<div class="form-group">
+                    <label for="txtSenderEmail" asp-for="Setting.SMTPSenderEmail">Sender Email</label>
+                    <input type="email" asp-for="Setting.SMTPSenderEmail" class="form-control" id="txtSenderEmail" placeholder="Sender Email">
+                </div>
+                <div class="form-group">
+                    <label for="txtLogo" asp-for="Setting.FavIcon">Favicon</label>
+                    <input type="hidden" asp-for="Setting.FavIcon" class="form-control" id="txtLogo" placeholder="Favicon">
+                </div>
+                <div class="form-group">
+                    
+                    <div class="row">
+                        <div class="small-12 medium-2 large-2 columns">
+                            <div class="">
+                                <img alt="favicon" style="height:128px" class="profile-pic2 p-img" src="/@Model.Setting.FavIcon">
+
+                            </div>
+                            <div class="p-image">
+                                <i class="fa fa-camera upload-button2"></i>
+                                <input class="file-upload2" type="file" asp-for="UploadFileFavIcon" accept="image/*" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="chkEnableRegistration" asp-for="Setting.EnableRegistration">Enable Registration</label>
+                    <input type="checkbox" class="form-control" data-toggle="toggle" style="width:40px" asp-for="Setting.EnableRegistration">
+
+                </div>
+                <div class="form-group">
+                    <label for="chkUseOrganisations" asp-for="Setting.UseOrganisations">Use Organisations</label>
+                    <input type="checkbox" class="form-control" data-toggle="toggle" style="width:40px" asp-for="Setting.UseOrganisations">
+                </div>
+                <div class="form-group">
+                    <label for="drpDefaultOrganisation" asp-for="Setting.DefaultOrganisationId">Default Organisation</label>
+                    <select class="form-control select2" asp-for="Setting.DefaultOrganisationId">
+                        <option value="">* New Users Auto Create Organisation</option>
+                        @foreach (var org in Model.Organisations)
+                        {
+                            <option value="@org.Id">@org.OrganisationName</option>
+                        }
+                    </select>
+
+                </div>
+                <div class="form-group">
+                    <label for="chkEnableSSO" asp-for="Setting.EnableSSO">Enable SSO (Global SSO)</label>
+                    <input type="checkbox" class="form-control" data-toggle="toggle" style="width:40px" asp-for="Setting.EnableSSO">
+                    
+                </div>
+                <div class="form-group">
+                    <label for="chkEnableSSO" asp-for="Setting.EnableOrganisationSSO">Enable Organisational SSO (Disable Global SSO)</label>
+                    <input type="checkbox" class="form-control" data-toggle="toggle" style="width:40px" asp-for="Setting.EnableOrganisationSSO">
+
+                </div>
+                <div class="form-group">
+                    <label for="chkAutoRegistration" asp-for="Setting.EnableAutoRegistration">Auto Registration</label>
+                    <input type="checkbox" class="form-control" data-toggle="toggle" style="width:40px" asp-for="Setting.EnableAutoRegistration">
+
+                </div>
+                <div class="form-group">
+                    <label for="txtEntityID" asp-for="Setting.EntityID">EntityID</label>
+                    <input type="text" asp-for="Setting.EntityID" class="form-control" id="txtEntityID" placeholder="EntityID">
+                </div>
+                <div class="form-group">
+                    <label for="txtLoginURL" asp-for="Setting.LoginURL">Login URL</label>
+                    <input type="text" asp-for="Setting.LoginURL" class="form-control" id="txtLoginURL" placeholder="Login URL">
+                </div>
+                <div class="form-group">
+                    <label for="txtSigningCertificate" asp-for="Setting.SigningCertificate">Signing Certificate</label>
+                    <textarea type="text" asp-for="Setting.SigningCertificate" class="form-control" id="txtSigningCertificate" placeholder="Signing Certificate"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="drpNotificationTemplates" asp-for="Setting.DefaultNotificationTemplate">Default Notification Template</label>
+                    <select class="form-control select2" asp-for="Setting.DefaultNotificationTemplate.Id">
+                        <option value="">Select a Template</option>
+                        @foreach (var template in Model.NotificationTemplates)
+                        {
+                            <option value="@template.Id">@template.TemplateName</option>
+                        }
+                    </select>
+
+                </div>
+                <div class="form-group">
+                    <label for="txtBackgroundColor" asp-for="Setting.ActiveItemBackgroundColor">Active Item Background Color</label>
+                    <input type="color" asp-for="Setting.ActiveItemBackgroundColor" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label for="txtBackgroundColorHover" asp-for="Setting.ActiveItemBackgroundColorHover">Active Item Background Hover Color</label>
+                    <input type="color" asp-for="Setting.ActiveItemBackgroundColorHover" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label for="txtTextColor" asp-for="Setting.ItemTextColor">Item Text Color</label>
+                    <input type="color" asp-for="Setting.ItemTextColor" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label for="txtTextColorHover" asp-for="Setting.StripeSecretKey">Stripe Secret Key (Subscriptions by Org on this site)</label>
+                    <input type="text" asp-for="Setting.StripeSecretKey" class="form-control" placeholder="Stripe Secret Key" />
+                </div>
+                <div class="form-group">
+                    <label>Organisations Require Subscription</label>
+                    <input type="checkbox" class="form-control" data-toggle="toggle" style="width:40px" asp-for="Setting.OrganisationsRequireSubscription">
+                </div>
+                <div class="form-group">
+                    <label>Stripe Customer Portal Url</label>
+                    <input type="url" asp-for="Setting.StripeCustomerPortalUrl" class="form-control" placeholder="Stripe Customer Portal Url" />
+                </div>
+                <div class="form-group">
+                    <label asp-for="Setting.StripeWebhookId">Stripe Webhook Id</label>
+                    <input type="text" asp-for="Setting.StripeWebhookId" class="form-control" placeholder="Stripe Webhook Id" />
+                </div>
+                <div class="form-group">
+                    <label>Stripe Usage Price Id:</label>
+                    <i>Adds the price/product to Customer Subscriptions</i>
+                    <input type="text" asp-for="Setting.StripeUsagePriceId" class="form-control" placeholder="Stripe Usage Price Id" />
+                </div>
+                <div class="form-group">
+                    <label>Stripe Meter Evant Name</label>
+                    <input type="text" asp-for="Setting.StripeMeterEventName" class="form-control" placeholder="Stripe Meter Event Name" />
+                </div>
+                <div class="form-group">
+                    <label asp-for="Setting.OpenAIKey">OpenAI Key</label>
+                    <input type="text" asp-for="Setting.OpenAIKey" class="form-control" placeholder="OpenAI Key"  />
+                </div>
+                <div class="form-group">
+                    <label  asp-for="Setting.UseFrontend">Use Frontend?</label>
+                    <input type="checkbox" class="form-control" data-toggle="toggle" style="width:40px" asp-for="Setting.UseFrontend">
+
+                </div>
+                <div class="form-group">
+                    <label>Slick Tracker URL</label>
+                    <input type="url" asp-for="Setting.SlickTrackerUrl" class="form-control" placeholder="Slick Tracker URL" />
+                </div>
+                <div class="form-group">
+                    <label>Terms of Service</label>
+                    <textarea id="txtTermsOfService" asp-for="Setting.TermsOfService" class="form-control" rows="5"></textarea>
+                </div>
+			</div>
+			<div class="card-footer">
+                <br>
+                <button type="submit" class="btn btn-success" name="action" value="submit">Save</button>
+                
+            </div>
+			</form>
+
+        <!-- form end -->
+    </div>
+</div>
+<!-- /.card -->
+@section PageScripts{
+    @* <script src="../../../plugins/summernote/summernote-bs4.min.js"></script>
+    <script>
+        $(function () {
+            // Summernote
+            $('#txtTermsOfService').summernote()
+        })
+    </script> *@
+    <style>
+        .profile-pic {
+            /*width: 200px;*/
+            max-height: 200px;
+            display: inline-block;
+        }
+
+        .profile-pic2 {
+            /*width: 200px;*/
+            max-height: 200px;
+            display: inline-block;
+        }
+
+        .file-upload {
+            display: none;
+        }
+        .file-upload2 {
+            display: none;
+        }
+        .circle {
+            border-radius: 100% !important;
+            overflow: hidden;
+            width: 128px;
+            height: 128px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            position: inherit;
+            top: 72px;
+        }
+        .p-img {
+            max-width: 100%;
+            height: auto;
+        }
+        .p-image {
+            width:50px;
+          position: relative;
+          top: -19px;
+          left: 0px;
+          color: #666666;
+          transition: all .3s cubic-bezier(.175, .885, .32, 1.275);
+        }
+        .p-image:hover {
+          transition: all .3s cubic-bezier(.175, .885, .32, 1.275);
+        }
+        .upload-button {
+          font-size: 1.2em;
+        }
+
+        .upload-button:hover {
+          transition: all .3s cubic-bezier(.175, .885, .32, 1.275);
+          color: #999;
+        }
+
+        .upload-button2 {
+            font-size: 1.2em;
+        }
+
+            .upload-button2:hover {
+                transition: all .3s cubic-bezier(.175, .885, .32, 1.275);
+                color: #999;
+            }
+    </style>
+
+    <script>
+        $(document).ready(function () {
+
+
+            var readURL = function (input) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+
+                    reader.onload = function (e) {
+                        $('.profile-pic').attr('src', e.target.result);
+                    }
+
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+            var readURL2 = function (input) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+
+                    reader.onload = function (e) {
+                        $('.profile-pic2').attr('src', e.target.result);
+                    }
+
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+
+
+            $(".file-upload").on('change', function () {
+                readURL(this);
+            });
+
+            $(".upload-button").on('click', function () {
+                $(".file-upload").click();
+            });
+
+            $(".file-upload2").on('change', function () {
+                readURL2(this);
+            });
+
+            $(".upload-button2").on('click', function () {
+                $(".file-upload2").click();
+            });
+
+            
+        });
+    </script>
+
+    
+}

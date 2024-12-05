@@ -1,0 +1,61 @@
+﻿@page
+@model MyEF2.WebApp.Pages.Account.DeviceLoginModel
+@{
+    ViewData["Title"] = "Device Login";
+    Layout = "_LoginLayout";
+}
+
+    <div class="input-group mb-3">
+        <div style="width:100%;text-align:center;font-size:80px">
+            <img id="imgQRCode" src="@Model.QRCode" />
+        </div>
+    </div>
+
+    <div class="input-group mb-3">
+        <div style="width:100%;text-align:center;font-size:80px">
+            <label id="lblLoginCode">@Model.LoginCode</label>
+        </div>
+    </div>
+    
+<script>
+    //use ajax with the lblLoginCode to check if the LoginCode has a value in AuthenticationCode
+    //if it does, then redirect to the login page with the email and password
+
+    var intervalId = setInterval(function () {
+        
+        
+        $.ajax({
+            url: '/Account/DeviceLogin?handler=RequestCheck',
+            type: 'POST',
+            data: { loginCode: $('#lblLoginCode').text() },
+            success: function (response) {
+                if (response && response.authenticationCode && response.authenticationCode.trim() !== '') {
+                    // response is not null and authenticationCode has a non-empty value
+                    console.log('AuthenticationCode: ' + response.authenticationCode);
+                    clearInterval(intervalId);
+                    //call another ajax function to handler=ProcessAuth which passes the response.id
+                    $.ajax({
+                        url: '/Account/DeviceLogin?handler=ProcessAuth',
+                        type: 'POST',
+                        data: { id: response.authenticationCode },
+                        success: function (response) {
+                            //handler will redirect
+                            console.log(response);
+                            window.location.href = response.returntopage;
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            console.log('Error: ' + textStatus + ', ' + errorThrown);
+                        }
+                    });
+                } else {
+                    //stop the timer
+                    
+                    console.log('Response is null or AuthenticationCode is an empty string');
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.log('Error: ' + textStatus + ', ' + errorThrown);
+            }
+        });
+    }, 1000); // Run every 1000 milliseconds (1 second)
+</script>

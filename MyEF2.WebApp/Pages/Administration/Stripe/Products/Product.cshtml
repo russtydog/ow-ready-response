@@ -1,0 +1,114 @@
+﻿@page "/Administration/Stripe/Products/Product/{id?}"
+@model MyEF2.WebApp.Pages.Administration.Stripe.Products.ProductModel
+@{
+    ViewData["Title"] = "Stripe Product";
+}
+<link rel="stylesheet" href="../../../../plugins/summernote/summernote-bs4.min.css">
+
+<div class="col-md-12">
+    <!-- general form elements -->
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Product Details</h3>
+        </div>
+        <!-- /.card-header -->
+        <!-- form start -->
+        <form method="post">
+            <div class="card-body">
+                <div asp-validation-summary="All" class="text-danger"></div>
+                <div class="form-group">
+                    <label for="txtProductName" asp-for="StripeProduct.Name">Product Name</label>
+                    <input type="text" asp-for="StripeProduct.Name" class="form-control" id="txtProductName" placeholder="Product Name">
+                </div>
+                <div class="form-group">
+                    <label for="txtDescription" asp-for="StripeProduct.Description">Description</label>
+                    <input type="text" asp-for="StripeProduct.Description" class="form-control" id="txtDescription" placeholder="Description">
+                </div>
+                <div class="form-group">
+                    <label for="txtStatementDescription" asp-for="StripeProduct.StatementDescriptor">Description</label>
+                    <input type="text" asp-for="StripeProduct.StatementDescriptor" class="form-control" id="txtStatementDescription" placeholder="Statement Descriptor">
+                </div>
+                <div class="form-group">
+                    <label for="txtFrequency" asp-for="StripeProduct.Frequency">Frequency</label>
+                    <select id="drpFrequency" class="form-control select2" asp-for="StripeProduct.Frequency">
+                        <option value="">-- Select Frequency --</option>
+                        <option value="OnceOff">Once Off</option>
+                        <option value="month">Monthly</option>
+                        <option value="year">Yearly</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Amount</label>
+                    <input type="number" step="0.01" asp-for="StripeProduct.Amount" class="form-control" id="txtAmount" placeholder="Amount">
+                </div>
+                <div class="form-group">
+                    <label>Currency</label>
+                    <input type="text" asp-for="StripeProduct.Currency" class="form-control" id="txtCurrency" placeholder="Currency">
+                </div>
+                <div class="form-group">
+                    <label>Trial Period Days</label>
+                    <input type="number" asp-for="StripeProduct.TrialPeriodDays" class="form-control" id="txtTrialPeriodDays" placeholder="Trial Period Days">
+                </div>
+               <div class="form-group">
+                <label>Features</label>
+                <textarea id=txtFeatures asp-for="StripeProduct.Features" class="form-control" rows="5"></textarea>
+               </div>
+               <div class="form-group">
+                    <label>Hide From Pricing</label>
+                    <input type="checkbox" class="form-control" data-toggle="toggle" style="width:40px"  asp-for="StripeProduct.HideFromPricing"  id="chkHideFromPricing" placeholder="Hide From Pricing">
+               </div>
+                <input type="hidden" asp-for="StripeProduct.StripeProductId" class="form-control" id="txtStripeProductId" placeholder="StripeProductId">
+                <input type="hidden" asp-for="StripeProduct.PlanId"/>
+                
+            </div>
+            <div class="card-footer">
+                <br>
+                <button type="submit" class="btn btn-success" name="action" value="submit">Save</button>
+                @if (Model.Id != null)
+                {
+                    @* <button type="submit" class="btn btn-default" name="action" value="delete">Delete</button> *@
+                    <button type="button" class="btn btn-default" data-toggle="modal" data-target="#modal-delete">
+                        Delete
+                    </button>
+                }
+                <a class="btn btn-default" href="../../../../Administration/Stripe/Products">Back</a>
+            </div>
+
+            <div class="modal fade" id="modal-delete">
+                <div class="modal-dialog modal-delete">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Delete Confirmation</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <p>Are you sure you wish to delete this record? This cannot be recovered if you confirm.&hellip;</p>
+                        </div>
+                        <div class="modal-footer justify-content-between">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-success" name="action" value="delete">Delete Confirm</button>
+                        </div>
+                    </div>
+                    <!-- /.modal-content -->
+                </div>
+                <!-- /.modal-dialog -->
+            </div>
+            
+        </form>
+
+        <!-- form end -->
+    </div>
+</div>
+
+@section PageScripts
+{
+    <script src="../../../../plugins/summernote/summernote-bs4.min.js"></script>
+    <script>
+        $(function () {
+            // Summernote
+            $('#txtFeatures').summernote()
+        })
+    </script>
+}

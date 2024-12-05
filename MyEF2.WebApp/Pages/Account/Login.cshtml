@@ -1,0 +1,47 @@
+﻿@page
+@model MyEF2.WebApp.Pages.Account.LoginModel
+@{
+    Layout="_LoginLayout";
+    ViewData["Title"] = "Login";
+}
+<form method="post">
+	<div asp-validation-summary="All" class="text-danger"></div>
+
+    <div class="input-group mb-3">
+		<input type="email" class="form-control" placeholder="Email" asp-for="Model.Email" />
+        <div class="input-group-append">
+            <div class="input-group-text">
+                <span class="fas fa-envelope"></span>
+            </div>
+        </div>
+		<span asp-validation-for="Model.Email" class="text-danger"></span>
+	</div>
+    <div class="input-group mb-3">
+		<input type="password" class="form-control" placeholder="Password" asp-for="Model.Password" />
+        <div class="input-group-append">
+            <div class="input-group-text">
+                <span class="fas fa-lock"></span>
+            </div>
+        </div>
+		<span asp-validation-for="Model.Password" class="text-danger"></span>
+	</div>
+	<div class="mb-3">
+        <button type="submit" class="btn btn-success btn-block">Login</button>
+	</div>
+</form>
+
+    
+@if (Request.Query["Email"].Count > 0)
+{
+<script>
+    document.querySelector('input[type="password"]').focus();
+    </script>
+}
+else
+{
+    <script>
+    document.querySelector('input[type="email"]').focus();
+    </script>
+}
+
+

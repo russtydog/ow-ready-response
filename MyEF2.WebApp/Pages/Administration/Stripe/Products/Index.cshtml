@@ -1,0 +1,65 @@
+﻿@page 
+@model MyEF2.WebApp.Pages.Administration.Stripe.Products.IndexModel
+@{
+    ViewData["Title"] = "Stripe Products";
+}
+<div>
+    Stripe Products are intended for Admin use, they will be available for all Organisation(s) within the application.
+</div>
+<div class="col-md-12" style="text-align: left;">
+	<a href="Products/Product" class="btn btn-success">Create</a>
+
+</div>
+<br>
+<br>
+<div class="col-md-12">
+	<div class="card">
+		<div class="card-header">
+			<h3 class="card-title">Products</h3>
+		</div>
+		<!-- /.card-header -->
+		<div class="card-body">
+			<table class="table table-bordered table-striped" id=tblProducts>
+				<thead>
+					<tr>
+						<th>Product</th>
+						<th>Description</th>
+						<th>Action</th>
+					</tr>
+
+				</thead>
+				<tbody>
+					@if (Model.StripeProducts != null)
+					{
+						foreach (var product in Model.StripeProducts)
+						{
+							<tr>
+								<td><a asp-page="Product" asp-route-id="@product.Id">@product.Name</a></td>
+								<td><a asp-page="Product" asp-route-id="@product.Id">@product.Description</a></td>
+								<td>
+									<a title="Edit" asp-page="Product" asp-route-id="@product.Id"><i class="fas fa-edit"></i></a>
+
+								</td>
+							</tr>
+						}
+					}
+				</tbody>
+			</table>
+		</div>
+	</div>
+
+</div>
+
+
+@section PageScripts
+{
+
+	<script>
+		$(function () {
+			$("#tblProducts").DataTable({
+				"responsive": true, "lengthChange": false, "autoWidth": true,
+				
+			});
+		});
+	</script>
+}

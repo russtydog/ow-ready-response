@@ -1,0 +1,289 @@
+﻿@page
+@model MyEF2.WebApp.Pages.PricingModel
+@{
+    ViewData["Title"] = "Pricing";
+    Layout = "_EmptyLayout";
+}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@Model.Setting.ApplicationName</title>
+
+    <link rel="shortcut icon" href="/favicon.png" type="image/x-icon">
+    <link rel="icon" href="/favicon.png" type="image/x-icon">
+    <!--- End favicon-->
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Raleway:wght@600;700&display=swap" rel="stylesheet">
+    <!-- End google font  -->
+
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/magnific-popup.css">
+    <link rel="stylesheet" href="assets/css/slick.css">
+    <link rel="stylesheet" href="assets/css/animate.css">
+    <link rel="stylesheet" href="assets/css/fontawesome.css">
+
+
+    <!-- Code Editor  -->
+    <style>
+        :root {
+            --heading-color: #000;
+            --body-color: #0C0C0C;
+            --primary-color: @Model.Setting.ActiveItemBackgroundColor;
+            --secondary-color: @Model.Setting.ActiveItemBackgroundColorHover;
+            --white-color: #ffffff;
+            --gray-color: #414141;
+            --light-color: #E6E6E6;
+            --dark-bg: #000000;
+            --blue-bg: @Model.Setting.ActiveItemBackgroundColor;
+            --light-bg: #FAFAFA;
+            --white-bg: #fff
+        }
+    </style>
+    <style>
+        .semi-circle {
+            position: absolute;
+            bottom: 0; /* Anchors the semi-circle to the bottom */
+            left: 50%;
+            transform: translateX(-50%); /* Centering the semi-circle */
+            width: 1000px; /* Matching the width of the container */
+            height: 500px; /* Custom height for the semi-circle */
+            border-radius: 500px 500px 0 0; /* Adjusted for proper curvature */
+            background-color: @Model.Setting.ActiveItemBackgroundColor; /* Color of the semi-circle */
+            z-index: -1; /* Ensures the semi-circle is behind the content */
+        }
+        .unique-features-list ul li {
+            background-image: url('assets/images/v3/check.png');
+            background-repeat: no-repeat;
+            padding-left: 40px; /* Adjust based on your image size */
+            background-position: left center;
+            list-style-type: none; /* To remove the default bullet points */
+        }
+    </style>
+    <link rel="stylesheet" href="assets/css/main.css">
+    <link rel="stylesheet" href="assets/css/app.min.css">
+    @if(!string.IsNullOrEmpty(Model.Setting.SlickTrackerUrl))
+    {
+        <script src="@Model.Setting.SlickTrackerUrl"></script>
+    }
+</head>
+
+<body class="light">
+
+    <div class="zubuz-preloader-wrap">
+        <div class="zubuz-preloader">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+
+
+
+
+    <header class="site-header site-header--menu-center zubuz-header-section" id="sticky-menu">
+        <div class="container">
+            <nav class="navbar site-navbar">
+                <!-- Brand Logo-->
+                <div class="brand-logo">
+                    <a href="/Index">
+                        <img src="dist/img/Logo.png" alt="" class="light-version-logo">
+                    </a>
+                </div>
+                <div class="menu-block-wrapper">
+                    <div class="menu-overlay"></div>
+                    <nav class="menu-block" id="append-menu-header">
+                        <div class="mobile-menu-head">
+                            <div class="go-back">
+                                <i class="fa fa-angle-left"></i>
+                            </div>
+                            <div class="current-menu-title"></div>
+                            <div class="mobile-menu-close">&times;</div>
+                        </div>
+                        <ul class="site-menu-main">
+                        
+                        <li class="nav-item">
+                            <a href="about-us.html" class="nav-link-item">About Us</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/Pricing" class="nav-link-item">Pricing</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="contact-us.html" class="nav-link-item">Contact Us</a>
+                        </li>
+                        </ul>
+                    </nav>
+                </div><ul>
+                
+              </ul>
+
+                <div class="header-btn header-btn-l1 ms-auto d-none d-xs-inline-flex">
+                    <div class="zubuz-header-btn-wrap">
+                        <a class="zubuz-login-btn" href="/Dashboard">Login</a>
+                    </div>
+                    <a class="zubuz-default-btn zubuz-header-btn" href="/Pricing">
+                        <span>Get Started</span>
+                    </a>
+                </div>
+                <!-- mobile menu trigger -->
+                <div class="mobile-menu-trigger light">
+                    <span></span>
+                </div>
+                <!--/.Mobile Menu Hamburger Ends-->
+            </nav>
+        </div>
+    </header>
+    <!--End landex-header-section -->
+
+    <div class="zubuz-breadcrumb">
+        <div class="container">
+            <h1 class="post__title">Subscriptions</h1>
+            <nav class="breadcrumbs">
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li aria-current="page"> Subscription</li>
+                </ul>
+            </nav>
+
+        </div>
+    </div>
+    <!-- End breadcrumb -->
+    <form method="post">
+        <div class="section zubuz-section-padding3">
+            <div class="container">
+                <div class="zubuz-section-title center">
+                    <h2>Available subscription plans</h2>
+                </div>
+                
+                <div class="row zubuz-pricing-four-column" id="table-price-value" data-pricing-dynamic data-value-active="monthly">
+                    @foreach(var product in Model.StripeProducts){
+                        <div class="col-xl-3 col-md-6">
+                            <div class="zubuz-pricing-wrap">
+                                <div class="zubuz-pricing-header">
+                                    <h5>@product.Name</h5>
+                                </div>
+                                <div class="zubuz-pricing-price">
+                                    <h2 style="font-size:60px">$</h2>
+                                    <div style="font-size:55px" class="zubuz-price dynamic-value" data-active="0" data-monthly="@product.Amount.ToString("#.##")" data-yearly="19"></div>
+                                    <p class="dynamic-value" data-active="/Monthly" data-monthly="/month" data-yearly="/Yearly"></p>
+                                </div>
+                                <div class="zubuz-pricing-description">
+                                    <p>@product.Description</p>
+                                </div>
+                                <div class="zubuz-pricing-body">
+                                    <p>@product.Name includes:</p>
+                                    <div class="unique-features-list">
+                                        @Html.Raw(@product.Features)
+                                    </div>
+                                    <div style="font-size:15px;padding-left:30px;padding-top:5px">@(product.TrialPeriodDays == null ? "No free trial" : $"{product.TrialPeriodDays} Day(s) Free Trial")</div>
+
+                                    @* <ul>
+                                        <li><img src="assets/images/v3/check.png" alt="">Basic features</li>
+                                        <li><img src="assets/images/v3/check.png" alt="">Limited users & usage</li>
+                                        <li><img src="assets/images/v3/check.png" alt="">No customer support</li>
+                                        <li><img src="assets/images/v3/check.png" alt="">30 day chat history</li>
+                                        <li><img src="assets/images/v3/check.png" alt="">10 Integrations</li>
+                                        <li>@(product.TrialPeriodDays == null ? "No free trial" : $"{product.TrialPeriodDays} Day(s) Free Trial")</li>
+                                    </ul> *@
+                                </div>
+                                
+                                <button type="submit" class="zubuz-pricing-btn" name="subscribe" value="@product.Id">Subscribe Now</button>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+        <!-- End Section -->
+    </form>
+
+    <footer class="zubuz-footer-section main-footer">
+        <div class="container">
+            <div class="zubuz-footer-top">
+                <div class="row">
+                    <div class="col-xl-4 col-lg-12">
+                        <div class="zubuz-footer-textarea">
+                            <a href="">
+                                <img src="dist/img/Logo.png" alt="">
+                            </a>
+                            
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-md-4">
+                        <div class="zubuz-footer-menu extar-margin">
+                            <div class="zubuz-footer-title">
+                                <p>Navigation</p>
+                            </div>
+                            <ul>
+                                <li><a href="">About Us</a></li>
+                                <li><a href="/Pricing">Pricing</a></li>
+                                <li><a href="">Contact</a></li>
+                                <li><a href="/Dashboard">Login</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+            <div class="zubuz-footer-bottom">
+                <div class="zubuz-social-icon order-md-2">
+                    <ul>
+                        <li>
+                            <a href="https://twitter.com/" target="_blank">
+                                <i class="fab fa-twitter"></i>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://facebook.com/" target="_blank">
+                                <i class="fab fa-facebook-f"></i>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://www.instagram.com/" target="_blank">
+                                <i class="fab fa-instagram"></i>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://www.linkedin.com/" target="_blank">
+                                <i class="fab fa-linkedin"></i>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://github.com/" target="_blank">
+                                <i class="fab fa-github"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="zubuz-copywright">
+                    <p> &copy;Copyright 2024, All Rights Reserved by Mthemeus</p>
+                </div>
+            </div>
+
+        </div>
+    </footer>
+
+
+
+
+
+    <!-- scripts -->
+    <script src="assets/js/jquery-3.6.0.min.js"></script>
+    <script src="assets/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/js/menu/menu.js"></script>
+    <script src="assets/js/isotope.pkgd.min.js"></script>
+    <script src="assets/js/jquery.magnific-popup.min.js"></script>
+    <script src="assets/js/slick.js"></script>
+    <script src="assets/js/countdown.js"></script>
+    <script src="assets/js/wow.min.js"></script>
+    <script src="assets/js/faq.js"></script>
+
+    <script src="assets/js/app.js"></script>
+
+
+</body>
+</html>

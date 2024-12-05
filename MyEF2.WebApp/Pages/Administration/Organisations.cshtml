@@ -1,0 +1,62 @@
+﻿@page
+@model MyEF2.WebApp.Pages.Administration.OrganisationsModel
+@{
+	ViewData["Title"] = "Organisations";
+}
+<div class="col-md-12" style="text-align: left;">
+	<a href="/Administration/OrganisationDetails" class="btn btn-success">Create</a>
+
+</div>
+<br>
+<br>
+<div class="col-md-12">
+	<div class="card">
+		<div class="card-header">
+			<h3 class="card-title">Organisations</h3>
+		</div>
+		<!-- /.card-header -->
+		<div class="card-body">
+			<table class="table table-bordered table-striped" id=tblOrganisations>
+				<thead>
+					<tr>
+						<th>Organisation</th>
+						<th>ABN</th>
+						<th>Action</th>
+					</tr>
+
+				</thead>
+				<tbody>
+					@if (Model.Organisations != null)
+					{
+						foreach (var organisation in Model.Organisations)
+						{
+							<tr>
+								<td><a asp-page="OrganisationDetails" asp-route-id="@organisation.Id">@organisation.OrganisationName</a></td>
+								<td><a asp-page="OrganisationDetails" asp-route-id="@organisation.Id">@organisation.ABN</a></td>
+								<td>
+									<a title="Edit" asp-page="OrganisationDetails" asp-route-id="@organisation.Id"><i class="fas fa-edit"></i></a>
+
+								</td>
+							</tr>
+						}
+					}
+				</tbody>
+			</table>
+		</div>
+	</div>
+
+</div>
+
+
+@section PageScripts
+{
+
+	<script>
+		$(function () {
+			$("#tblOrganisations").DataTable({
+				"responsive": true, "lengthChange": false, "autoWidth": true,
+				
+			});
+		});
+	</script>
+}

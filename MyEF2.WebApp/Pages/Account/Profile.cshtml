@@ -1,0 +1,201 @@
+﻿@page
+@model MyEF2.WebApp.Pages.Account.ProfileModel
+@{
+    ViewData["Title"] = "Profile";
+}
+<div class="col-md-6">
+    <!-- general form elements -->
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Profile</h3>
+        </div>
+        <!-- /.card-header -->
+        <!-- form start -->
+        <form method="post" enctype="multipart/form-data">
+            <div class="card-body">
+                <input type="hidden" asp-for="UserModel.IsAdmin" />
+                <input type="hidden" asp-for="UserModel.MFAEnabled" />
+                <input type="hidden" asp-for="UserModel.MFASecret" />
+                <input type="hidden" asp-for="UserModel.IsOrgAdmin" />
+                <div asp-validation-summary="All" class="text-danger"></div>
+                <div class="form-group">
+                    <label for="txtFirstname" asp-for="UserModel.FirstName">First Name</label>
+                    <input type="text" asp-for="UserModel.FirstName" class="form-control" id="txtFirstname" placeholder="First Name">
+                </div>
+                <div class="form-group">
+                    <label for="txtLastname" asp-for="UserModel.LastName">Last Name</label>
+                    <input type="text" asp-for="UserModel.LastName" class="form-control" id="txtLastname" placeholder="Last Name">
+                </div>
+                <div class="form-group">
+                    <label for="txtEmail" asp-for="UserModel.Email">Email</label>
+                    <input readonly type="email" asp-for="UserModel.Email" class="form-control" id="txtEmail" placeholder="Email">
+                    <a class="btn btn-success" href="ChangeEmail">Change Email</a>
+                </div>
+                <div class="form-group">
+                    <label for="txtDateCreated" asp-for="UserModel.DateCreated">Date Created</label>
+                    <label asp-for="UserModel.DateCreated" class="form-control" id="txtDateCreated" placeholder="Date Created">@Model.UserModel.DateCreated.ToString("dd/MM/yyyy hh:mm:ss tt")</label>
+                </div>
+                <div class="form-group">
+                    <label for="txtDateModified" asp-for="UserModel.DateModified">Date Modified</label>
+                    <label asp-for="UserModel.DateModified" class="form-control" id="txtDateModified" placeholder="Date Modified">@Model.UserModel.DateModified.ToString("dd/MM/yyyy hh:mm:ss tt")</label>
+                </div>
+                <div class="form-group">
+                    <label for="txtDateLastLogin" asp-for="@Model.LastLogin">Date Last Login</label>
+                    <label asp-for="@Model.LastLogin" class="form-control" id="txtDateLastLogin" placeholder="Last Login">@Model.LastLogin.ToString("dd/MM/yyyy hh:mm:ss tt")</label>
+                </div>
+                <div class="form-group">
+                    <label for="imgDisplay">Profile</label>
+                    <input type="hidden" asp-for="UserModel.Profile" />
+                    <div class="row">
+                        <div class="small-12 medium-2 large-2 columns">
+                            <div class="circle">
+                                <img alt="Profile" style="height:128px" class="profile-pic p-img" src="/uploads/@Model.UserModel.Profile">
+
+                            </div>
+                            <div class="p-image">
+                                <i class="fa fa-camera upload-button"></i>
+                                <input class="file-upload" type="file" asp-for="UploadFile" accept="image/*" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Display Theme</label>
+                    <select class="form-control" asp-for="UserModel.DisplayTheme">
+                        <option value="0">Light Mode</option>
+                        <option value="1">Dark Mode</option>
+                        <option value="2">System Setting</option>
+                    </select>
+                </div>
+               
+                
+                <div class="form-group">
+                    <label for="MFA">MFA Configuration</label>
+                    @if(Model.UserModel.MFAEnabled)
+                    {
+                        <div>MFA is currently enabled, <a href="MFAStep1">click here</a> to reconfigure your authenticator app</div>
+                    }
+                    else
+                    {
+                        <a href="MFAStep1">Configure MFA</a>
+                    }
+                </div>
+                <div class="form-group">
+                    <label for="drpTimezones" asp-for="UserModel.TimeZone"></label>
+                    <select class="form-control select2" asp-for="UserModel.TimeZone">
+                        <option value="">Select a TimeZone</option>
+                        @foreach (var timeZone in Model.TimeZones)
+                        {
+                            <option value="@timeZone.Id">@timeZone.DisplayName</option>
+                        }
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="">Password</label>
+                    <br />
+                    <a class="btn btn-success" href="ChangePassword">Change Password</a>
+                </div>
+                <div class="form-group">
+                    <label for="txtAPIKey" asp-for="UserModel.APIKey">API Key</label>
+                    <input type=text asp-for="UserModel.APIKey" class="form-control" id="txtAPIKey" placeholder="API Key" />
+                    <a href="@Model.APIUrl" target="_blank">@Model.APIUrl</a>
+                    <br />
+                    <button id="btnGenerateNewAPIKey" type="submit" asp-page-handler="GenerateNewKey" class="btn btn-success">Generate New Key</button>
+                </div>
+                <div class="form-group">
+                    <label>Link Device</label>
+                    <div>
+                        Remotely login from another device: <a href="LoginRemoteDevice" class="btn btn-success">Link Device</a>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <br>
+                    <button type="submit" class="btn btn-success" asp-page-handler="SaveChanges" name="action" value="submit">Save</button>
+                    
+                    
+                </div>
+
+
+
+            </div>
+        </form>
+
+        <!-- form end -->
+    </div>
+</div>
+<!-- /.card -->
+
+@section PageScripts{
+
+    <style>
+                .profile-pic {
+            width: 200px;
+            max-height: 200px;
+            display: inline-block;
+        }
+
+        .file-upload {
+            display: none;
+        }
+        .circle {
+            border-radius: 100% !important;
+            overflow: hidden;
+            width: 128px;
+            height: 128px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            position: inherit;
+            top: 72px;
+        }
+        .p-img {
+            max-width: 100%;
+            height: auto;
+        }
+        .p-image {
+          position: relative;
+          width:50px;
+          top: -19px;
+          left: 111px;
+          color: #666666;
+          transition: all .3s cubic-bezier(.175, .885, .32, 1.275);
+        }
+        .p-image:hover {
+          transition: all .3s cubic-bezier(.175, .885, .32, 1.275);
+        }
+        .upload-button {
+          font-size: 1.2em;
+        }
+
+        .upload-button:hover {
+          transition: all .3s cubic-bezier(.175, .885, .32, 1.275);
+          color: #999;
+        }
+    </style>
+
+    <script>
+        $(document).ready(function () {
+
+
+            var readURL = function (input) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+
+                    reader.onload = function (e) {
+                        $('.profile-pic').attr('src', e.target.result);
+                    }
+
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+
+
+            $(".file-upload").on('change', function () {
+                readURL(this);
+            });
+
+            $(".upload-button").on('click', function () {
+                $(".file-upload").click();
+            });
+        });
+    </script>
+}   

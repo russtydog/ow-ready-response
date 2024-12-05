@@ -1,0 +1,65 @@
+﻿@page
+@model MyEF2.WebApp.Pages.Conversations.IndexModel
+@{
+    ViewData["Title"] = "Conversations";
+}
+<div class="col-md-12" style="text-align: left;">
+	<a href="/Conversations/Conversation" class="btn btn-success">Create</a>
+
+</div>
+<br>
+<br>
+<div class="col-md-12">
+	<div class="card">
+		<div class="card-header">
+			<h3 class="card-title">Conversations</h3>
+		</div>
+		<!-- /.card-header -->
+		<div class="card-body">
+			<table class="table table-bordered table-striped" id=tblConversations>
+				<thead>
+					<tr>
+						<th>Started</th>
+						<th>No of Messages</th>
+						<th>Action</th>
+					</tr>
+
+				</thead>
+				<tbody>
+					@if (Model.Conversations != null)
+					{
+						foreach (var Conversation in Model.Conversations)
+						{
+							<tr>
+								<td><a asp-page="Conversation" asp-route-id="@Conversation.Id">@Model.LocalDate(Conversation.Started).ToString("yyyy-MM-dd HH:mm:ss tt")</a></td>
+								<td><a asp-page="Conversation" asp-route-id="@Conversation.Id"> @Conversation.Messages.Count.ToString() </a></td>
+
+								<td>
+									<a title="Edit" asp-page="Conversation" asp-route-id="@Conversation.Id"><i class="fas fa-edit"></i></a>
+
+								</td>
+							</tr>
+						}
+					}
+				</tbody>
+			</table>
+		</div>
+	</div>
+
+</div>
+
+
+@section PageScripts
+{
+
+	<script>
+		$(function () {
+			$("#tblConversations").DataTable({
+				"responsive": true, "lengthChange": false, "autoWidth": true,
+				order: [
+					[0, 'desc']
+				]
+			});
+		});
+	</script>
+}

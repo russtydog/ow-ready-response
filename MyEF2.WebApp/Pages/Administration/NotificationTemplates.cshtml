@@ -1,0 +1,61 @@
+﻿@page
+@model MyEF2.WebApp.Pages.Administration.NotificationTemplatesModel
+@{
+	ViewData["Title"] = "Notification Templates";
+}
+<div class="col-md-12" style="text-align: left;">
+    <a href="NotificationTemplateDetails" class="btn btn-success">Create</a>
+
+</div>
+<br>
+<br>
+<div class="col-md-12">
+	<div class="card">
+		<div class="card-header">
+			<h3 class="card-title">Notification Templates</h3>
+		</div>
+		<!-- /.card-header -->
+		<div class="card-body">
+			<table class="table table-bordered table-striped" id=tblNotificationTemplates>
+				<thead>
+					<tr>
+						<th>Template Name</th>
+						<th>Action</th>
+					</tr>
+
+				</thead>
+				<tbody>
+					@if (Model.NotificationTemplates != null)
+					{
+						foreach (var notificationtemplate in Model.NotificationTemplates)
+						{
+							<tr>
+								<td><a asp-page="NotificationTemplateDetails" asp-route-id="@notificationtemplate.Id">@notificationtemplate.TemplateName</a></td>
+								<td>
+									<a title="Edit" asp-page="NotificationTemplateDetails" asp-route-id="@notificationtemplate.Id"><i class="fas fa-edit"></i></a>
+									<a title="Edit" asp-page="NotificationTemplateDesigner" asp-route-id="@notificationtemplate.Id"><i class="fas fa-file"></i></a>
+
+								</td>
+							</tr>
+						}
+					}
+				</tbody>
+			</table>
+		</div>
+	</div>
+
+</div>
+
+
+@section PageScripts
+{
+    
+    <script>
+        $(function () {
+            $("#tblNotificationTemplates").DataTable({
+            "responsive": true, "lengthChange": false, "autoWidth": true,
+            "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+            }).buttons().container().appendTo('#tblProducts_wrapper .col-md-6:eq(0)');
+        });
+    </script>
+}

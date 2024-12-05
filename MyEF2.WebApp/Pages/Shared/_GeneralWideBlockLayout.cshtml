@@ -1,0 +1,64 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>@ViewBag.Title</title>
+
+    <!-- Google Font: Source Sans Pro -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="../../../../plugins/fontawesome-free/css/all.min.css">
+    <!-- icheck bootstrap -->
+    <link rel="stylesheet" href="../../../../plugins/icheck-bootstrap/icheck-bootstrap.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="../../../../dist/css/adminlte.min.css">
+    <link rel="icon" href="~/favicon.png" type="image/png">
+    @(await Html.RenderComponentAsync<SlickTracker>(RenderMode.ServerPrerendered))
+    
+    @(await Html.RenderComponentAsync<CustomColors>(RenderMode.ServerPrerendered, new { UserName = "" }))
+    
+    <style>
+    @@media screen and (min-width: 769px) {
+        .login-box, .register-box {
+            width: 90%;
+        }
+    }
+    
+</style>
+</head>
+<body class="hold-transition login-page">
+    <div class="login-box">
+        <div class="card">
+            <div class="card-header text-center">
+                <a href="../Index" class="h1">
+                    <img src="~/dist/img/Logo.png" style="max-width:300px" />
+                </a>
+            </div>
+            <div class="card-body">
+                @RenderBody()
+            </div>
+            <!-- /.login-card-body -->
+        </div>
+    </div>
+    <!-- /.login-box -->
+    <!-- jQuery -->
+    <script src="../../../../plugins/jquery/jquery.min.js"></script>
+    <!-- Bootstrap 4 -->
+    <script src="../../../../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- AdminLTE App -->
+    <script src="../../../../dist/js/adminlte.min.js"></script>
+    @(await Html.RenderComponentAsync<DarkModeCheck>(RenderMode.ServerPrerendered, new { UserName = User.Identity.Name==null?"":User.Identity.Name }))
+    <script>
+        window.onload = function () {
+
+            var mode = document.getElementById('lblMode').innerHTML;
+            if (mode == 'dark-mode') {
+                var bodyElement = document.getElementsByTagName('body')[0];
+                bodyElement.classList.add('dark-mode');
+            }
+        }
+    </script>
+</body>
+</html>

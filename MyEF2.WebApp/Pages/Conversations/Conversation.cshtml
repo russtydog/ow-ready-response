@@ -1,0 +1,85 @@
+﻿@page "/Conversations/Conversation/{id?}"
+@model MyEF2.WebApp.Pages.Conversations.ConversationModel
+@{
+    ViewData["Title"] = "Conversation Messages";
+}
+
+<div class="col-md-12">
+    <!-- general form elements -->
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Conversation Details</h3>
+        </div>
+        <!-- /.card-header -->
+        <!-- form start -->
+        <form method="post">
+            <div class="card-body">
+                <div asp-validation-summary="All" class="text-danger"></div>
+                <div class="form-group">
+                    <label for="txtConversationName" asp-for="Conversation.Started">Conversation Started</label>
+                    <input type="text" asp-for="Conversation.Started" class="form-control" id="txtConversationName" placeholder="Conversation Started">
+                </div>
+                
+            </div>
+            
+
+            
+        </form>
+
+
+
+        <!-- form end -->
+    </div>
+
+	<div class="card">
+		<div class="card-header">
+			<h3 class="card-title">Conversations</h3>
+		</div>
+		<!-- /.card-header -->
+		<div class="card-body">
+			<table class="table table-bordered table-striped" id=tblMessages>
+				<thead>
+					<tr>
+						<th>Started</th>
+						<th>Sender</th>
+						<th>Response</th>
+						<th>Tokens</th>
+						
+					</tr>
+
+				</thead>
+				<tbody>
+					@if (Model.Conversation.Messages != null)
+					{
+						foreach (var message in Model.Conversation.Messages)
+						{
+							<tr>
+								<td>@Model.LocalDate(message.Created).ToString("yyyy-MM-dd HH:mm:ss tt")</td>
+								<td>@message.Sender</td>
+								<td>@message.Response</td>
+								<td>@message.Tokens</td>
+
+								
+							</tr>
+						}
+					}
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+<!-- /.card -->
+@section PageScripts
+	  {
+
+	<script>
+		$(function () {
+			$("#tblMessages").DataTable({
+				"responsive": true, "lengthChange": false, "autoWidth": true,
+				order: [
+					[0, 'asc']
+				]
+			});
+		});
+	</script>
+}

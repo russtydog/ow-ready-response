@@ -1,0 +1,29 @@
+﻿@page "/footerpanel"
+
+@code {
+    [Inject]
+    private MyEF2.DAL.Services.SettingService settingService { get; set; }
+
+    private MyEF2.DAL.Entities.Setting settings { get; set; }
+
+    [Parameter]
+    public string UserName { get; set; }
+
+    string version = typeof(Program).Assembly.GetName().Version.ToString();
+
+}
+
+<footer class="main-footer">
+
+    <div class="float-right d-none d-sm-block">
+        <b>Version</b> @version
+    </div>
+    <strong>Copyright &copy; @DateTime.Now.Year <a href="@settings.CompanyWebsite">@settings.CompanyName</a>.</strong> All rights reserved.
+</footer>
+
+@code {
+    protected override void OnParametersSet()
+    {
+        settings = settingService.GetSettings();
+    }
+}

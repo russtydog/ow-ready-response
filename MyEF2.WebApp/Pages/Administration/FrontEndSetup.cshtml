@@ -1,0 +1,305 @@
+@page
+@model MyEF2.WebApp.Pages.Administration.FrontEndSetupModel
+@{
+	ViewData["Title"]="Front End Setup";
+}
+<div class="col-md-12">
+    <!-- general form elements -->
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Admin Settings</h3>
+        </div>
+        <!-- /.card-header -->
+        <!-- form start -->
+        <form method="post" enctype="multipart/form-data">
+            <div class="card-body">
+                <div asp-validation-summary="All" class="text-danger"></div>
+                
+                <div class="form-group">
+                    <label>Hero Title</label>
+					<input type="text" class="form-control" asp-for="Setting.HeroTitle" />
+				</div>
+				<div class="form-group">
+                    <label>Hero Description</label>
+					<input type="text" class="form-control" asp-for="Setting.HeroDescription" />
+				</div>
+				<div class="form-group">
+                    <label>Customers Title</label>
+					<input type="text" class="form-control" asp-for="Setting.CustomersStatement" />
+				</div>
+				<div class="form-group">
+                    <label>Feature 1 Title</label>
+					<input type="text" class="form-control" asp-for="Setting.Feature1Title" />
+				</div>
+				<div class="form-group">
+                    <label>Feature 1 Description</label>
+					<input type="text" class="form-control" asp-for="Setting.Feature1Description" />
+				</div>
+				<div class="form-group">
+                    <label>Feature 1 Highlight 1 Title</label>
+					<input type="text" class="form-control" asp-for="Setting.Feature1Highlight1Title" />
+				</div>
+				<div class="form-group">
+                    <label>Feature 1 Description 1</label>
+					<input type="text" class="form-control" asp-for="Setting.Feature1Highlight1Description" />
+				</div>
+				<div class="form-group">
+                    <label>Feature 1 Highlight 2 Title</label>
+					<input type="text" class="form-control" asp-for="Setting.Feature1Hightlight2Title" />
+				</div>
+				<div class="form-group">
+                    <label>Feature 1 Description 2</label>
+					<input type="text" class="form-control" asp-for="Setting.Feature1Hightlight2Description" />
+				</div>
+				<div class="form-group">
+                    <label>Feature 2 Title</label>
+					<input type="text" class="form-control" asp-for="Setting.Feature2Title" />
+				</div>
+				<div class="form-group">
+                    <label>Feature 2 Description</label>
+					<input type="text" class="form-control" asp-for="Setting.Feature2Description" />
+				</div>
+				<div class="form-group">
+                    <label>Feature 2 Highlight 1 Icon</label>
+					<input type="text" class="form-control" asp-for="Setting.Feature2Highlight1Icon" />
+				</div>
+				<div class="form-group">
+                    <label>Feature 2 Highlight Title</label>
+					<input type="text" class="form-control" asp-for="Setting.Feature2Hightlight1Title" />
+				</div>
+				<div class="form-group">
+                    <label>Feature 1 Highlight Description</label>
+					<input type="text" class="form-control" asp-for="Setting.Feature2Hightlight1Description" />
+				</div>
+				<div class="form-group">
+                    <label>Feature 2 Highlight 2 Icon</label>
+					<input type="text" class="form-control" asp-for="Setting.Feature2Hightlight2Icon" />
+				</div>
+				<div class="form-group">
+                    <label>Feature 2 Highlight 2 Title</label>
+					<input type="text" class="form-control" asp-for="Setting.Feature2Hightlight2Title" />
+				</div>
+				<div class="form-group">
+                    <label>Feature 2 Highlight 2 Description</label>
+					<input type="text" class="form-control" asp-for="Setting.Feature2Hightlight2Description" />
+				</div>
+				<div class="form-group">
+                    <label>Features List Title</label>
+					<input type="text" class="form-control" asp-for="Setting.FeaturesListTitle" />
+				</div>
+				<div class="form-group">
+                    <label>Features List 1 Icon</label>
+					<input type="text" class="form-control" asp-for="Setting.FeaturesListFeature1Icon" />
+				</div>
+				<div class="form-group">
+                    <label>Features List 1 Title</label>
+					<input type="text" class="form-control" asp-for="Setting.FeaturesListFeature1Title" />
+				</div>
+				<div class="form-group">
+                    <label>Features List 1 Description</label>
+					<input type="text" class="form-control" asp-for="Setting.FeaturesListFeature1Description" />
+				</div>
+				<div class="form-group">
+                    <label>Features List 2 Icon</label>
+					<input type="text" class="form-control" asp-for="Setting.FeaturesListFeature2Icon" />
+				</div>
+				<div class="form-group">
+                    <label>Features List 2 Title</label>
+					<input type="text" class="form-control" asp-for="Setting.FeaturesListFeature2Title" />
+				</div>
+				<div class="form-group">
+                    <label>Features List 2 Description</label>
+					<input type="text" class="form-control" asp-for="Setting.FeaturesListFeature2Description" />
+				</div>
+				<div class="form-group">
+                    <label>Features List 3 Icon</label>
+					<input type="text" class="form-control" asp-for="Setting.FeaturesListFeature3Icon" />
+				</div>
+				<div class="form-group">
+					<label>Features List 3 Title</label>
+					<input type="text" class="form-control" asp-for="Setting.FeaturesListFeature3Title" />
+				</div>
+				<div class="form-group">
+					<label>Features List 3 Description</label>
+					<input type="text" class="form-control" asp-for="Setting.FeaturesListFeature3Description" />
+				</div>
+				<div class="form-group">
+					<label>Features List 4 Icon</label>
+					<input type="text" class="form-control" asp-for="Setting.FeaturesListFeature4Icon" />
+				</div>
+				<div class="form-group">
+					<label>Features List 4 Title</label>
+					<input type="text" class="form-control" asp-for="Setting.FeaturesListFeature4Title" />
+				</div>
+				<div class="form-group">
+					<label>Features List 4 Description</label>
+					<input type="text" class="form-control" asp-for="Setting.FeaturesListFeature4Description" />
+				</div>
+				<div class="form-group">
+					<label>Features List 5 Icon</label>
+					<input type="text" class="form-control" asp-for="Setting.FeaturesListFeature5Icon" />
+				</div>
+				<div class="form-group">
+					<label>Features List 5 Title</label>
+					<input type="text" class="form-control" asp-for="Setting.FeaturesListFeature5Title" />
+				</div>
+				<div class="form-group">
+					<label>Features List 5 Description</label>
+					<input type="text" class="form-control" asp-for="Setting.FeaturesListFeature5Description" />
+				</div>
+				<div class="form-group">
+					<label>Features List 6 Icon</label>
+					<input type="text" class="form-control" asp-for="Setting.FeaturesListFeature6Icon" />
+				</div>
+				<div class="form-group">
+					<label>Features List 6 Title</label>
+					<input type="text" class="form-control" asp-for="Setting.FeaturesListFeature6Title" />
+				</div>
+				<div class="form-group">
+					<label>Features List 6 Description</label>
+					<input type="text" class="form-control" asp-for="Setting.FeaturesListFeature6Description" />
+				</div>
+				<div class="form-group">
+					<label>Accordian 1 Title</label>
+					<input type="text" class="form-control" asp-for="Setting.Accordian1Title" />
+				</div>
+				<div class="form-group">
+					<label>Accordian 1 Description</label>
+					<input type="text" class="form-control" asp-for="Setting.Accordian1Description" />
+				</div>
+				<div class="form-group">
+					<label>Accordian 2 Title</label>
+					<input type="text" class="form-control" asp-for="Setting.Accordian2Title" />
+				</div>
+				<div class="form-group">
+					<label>Accordian 2 Description</label>
+					<input type="text" class="form-control" asp-for="Setting.Accordian2Description" />
+				</div>
+				<div class="form-group">
+					<label>Accordian 3 Title</label>
+					<input type="text" class="form-control" asp-for="Setting.Accordian3Title" />
+				</div>
+				<div class="form-group">
+					<label>Accordian 3 Description</label>
+					<input type="text" class="form-control" asp-for="Setting.Accordian3Description" />
+				</div>
+				<div class="form-group">
+					<label>Accordian Hero Title</label>
+					<input type="text" class="form-control" asp-for="Setting.AccordianHeroTitle" />
+				</div>
+				<div class="form-group">
+					<label>Accordian Hero Description 1</label>
+					<input type="text" class="form-control" asp-for="Setting.AccordianHeroDescription1" />
+				</div>
+				<div class="form-group">
+					<label>Accordian Hero Description 2</label>
+					<input type="text" class="form-control" asp-for="Setting.AccordianHeroDescription2" />
+				</div>
+				<div class="form-group">
+					<label>Enable Reviews Section</label>
+					<input type="checkbox" class="form-control" style="width:40px" asp-for="Setting.EnableReviews" />
+				</div>
+				<div class="form-group">
+					<label>Reviews Title</label>
+					<input type="text" class="form-control" asp-for="Setting.ReviewsTitle" />
+				</div>
+				<div class="form-group">
+					<label>Reviews 1 Rating</label>
+					<input type="number" min="0" max="5" class="form-control" asp-for="Setting.Review1Rating" />
+				</div>
+				<div class="form-group">
+					<label>Reviews 1 Title</label>
+					<input type="text" class="form-control" asp-for="Setting.Review1Title" />
+				</div>
+				<div class="form-group">
+					<label>Reviews 1 Description</label>
+					<input type="text" class="form-control" asp-for="Setting.Review1Description" />
+				</div>
+				<div class="form-group">
+					<label>Reviews 1 Author</label>
+					<input type="text" class="form-control" asp-for="Setting.Review1Author" />
+				</div>
+				<div class="form-group">
+					<label>Reviews 1 Author Company</label>
+					<input type="text" class="form-control" asp-for="Setting.Review1AuthorCompany" />
+				</div>
+				<div class="form-group">
+					<label>Reviews 2 Rating</label>
+					<input type="number" min="0" max="5" class="form-control" asp-for="Setting.Review2Rating" />
+				</div>
+				<div class="form-group">
+					<label>Reviews 2 Title</label>
+					<input type="text" class="form-control" asp-for="Setting.Review2Title" />
+				</div>
+				<div class="form-group">
+					<label>Reviews 2 Description</label>
+					<input type="text" class="form-control" asp-for="Setting.Review2Description" />
+				</div>
+				<div class="form-group">
+					<label>Reviews 2 Author</label>
+					<input type="text" class="form-control" asp-for="Setting.Review2Author" />
+				</div>
+				<div class="form-group">
+					<label>Reviews 2 Author Company</label>
+					<input type="text" class="form-control" asp-for="Setting.Review2AuthorCompany" />
+				</div>
+				<div class="form-group">
+					<label>Reviews 3 Rating</label>
+					<input type="number" min="0" max="5" class="form-control" asp-for="Setting.Review3Rating" />
+				</div>
+				<div class="form-group">
+					<label>Reviews 3 Title</label>
+					<input type="text" class="form-control" asp-for="Setting.Review3Title" />
+				</div>
+				<div class="form-group">
+					<label>Reviews 3 Description</label>
+					<input type="text" class="form-control" asp-for="Setting.Review3Description" />
+				</div>
+				<div class="form-group">
+					<label>Reviews 3 Author</label>
+					<input type="text" class="form-control" asp-for="Setting.Review3Author" />
+				</div>
+				<div class="form-group">
+					<label>Reviews 3 Author Company</label>
+					<input type="text" class="form-control" asp-for="Setting.Review3AuthorCompany" />
+				</div>
+				<div class="form-group">
+					<label>Reviews 4 Rating</label>
+					<input type="number" min="0" max="5" class="form-control" asp-for="Setting.Review4Rating" />
+				</div>
+				<div class="form-group">
+					<label>Reviews 4 Title</label>
+					<input type="text" class="form-control" asp-for="Setting.Review4Title" />
+				</div>
+				<div class="form-group">
+					<label>Reviews 4 Description</label>
+					<input type="text" class="form-control" asp-for="Setting.Review4Description" />
+				</div>
+				<div class="form-group">
+					<label>Reviews 4 Author</label>
+					<input type="text" class="form-control" asp-for="Setting.Review4Author" />
+				</div>
+				<div class="form-group">
+					<label>Reviews 4 Author Company</label>
+					<input type="text" class="form-control" asp-for="Setting.Review4AuthorCompany" />
+				</div>
+				<div class="form-group">
+					<label>Download Action Title</label>
+					<input type="text" class="form-control" asp-for="Setting.DownloadActionTitle" />
+				</div>
+				<div class="form-group">
+					<label>Download Action Description</label>
+					<input type="text" class="form-control" asp-for="Setting.DownloadActionDescription" />
+				</div>
+				<div class="form-group">
+					<label>Subscribe Text</label>
+					<input type="text" class="form-control" asp-for="Setting.SubscribeText" />
+				</div>
+			<!-- /.card-body -->
+			<div class="card-footer">
+				<button type="submit" class="btn btn-success">Save</button>
+			</div>
+		</form>
+	</div>
+	<!-- /.card -->
+</div>

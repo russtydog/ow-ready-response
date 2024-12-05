@@ -1,0 +1,124 @@
+@page
+@model MyEF2.WebApp.Pages.CreateDatabaseModel
+@{
+    ViewData["Title"]="Create Database";
+
+    Layout = "_EmptyLayout";
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>@ViewBag.Title</title>
+
+    <!-- Google Font: Source Sans Pro -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="~/plugins/fontawesome-free/css/all.min.css">
+    <!-- icheck bootstrap -->
+    <link rel="stylesheet" href="~/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="~/dist/css/adminlte.min.css">
+    <link rel="icon" href="~/favicon.png" type="image/png">
+    
+</head>
+<body class="hold-transition login-page">
+    <div class="login-box">
+        <div class="card">
+            <div class="card-header text-center">
+                <a href="../Index" class="h1">
+                    <img src="~/dist/img/Logo.png" style="max-width:300px" />
+                </a>
+            </div>
+            <div class="card-body">
+                <h2>Database Connection Error</h2>
+                <div>We couldn't connect to the target database for this application, please supply SA privillaged details and we'll create a new database.</div>
+                <div>If running docker, ensure values entered below match the environment variables of docker-compose file, eg sql-server is the default docker-compose server name, passwords match etc.</div>
+                <div>@Model.ConnectionString</div>
+                <form method="post">
+                    <div class="form-group mb-3">
+                        <label>Server</label>
+                        <div class="input-group mb-3">
+                        <input type="text" class="form-control" placeholder="sql-server" asp-for="Server"  />
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-server"></span>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label>Database</label>
+                        <div class="input-group mb-3">
+                        <input type="text" class="form-control" placeholder="myef2" asp-for="Database"  />
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-database"></span>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label>SA Username</label>
+                        <div class="input-group mb-3">
+                        <input type="text" class="form-control" placeholder="sa" asp-for="SAUsername"  />
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-user"></span>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label>SA Password</label>
+                        <div class="input-group mb-3">
+                        <input type="password" class="form-control" placeholder="yourStrong(!)Password" asp-for="SAPassword"  />
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-lock"></span>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label>Username</label>
+                        <div class=input-group mb-3>
+                        <input type="text" class="form-control" placeholder="myef2user" asp-for="Username"  />
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-user"></span>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label>Password</label>
+                        <div class="input-group mb-3">
+                            <input type="password" class="form-control" placeholder="yourStrong(!)Password" asp-for="Password" />
+                            <div class="input-group-append">
+                                <div class="input-group-text">
+                                    <span class="fas fa-lock"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+	                    <div asp-validation-summary="All" class="text-danger"></div>
+                        <button type="submit" class="btn btn-success btn-block">Create Database</button>
+                    </div>
+                </form>
+            </div>
+            <!-- /.login-card-body -->
+        </div>
+    </div>
+    <!-- /.login-box -->
+    <!-- jQuery -->
+    <script src="~/plugins/jquery/jquery.min.js"></script>
+    <!-- Bootstrap 4 -->
+    <script src="~/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- AdminLTE App -->
+    <script src="~/dist/js/adminlte.min.js"></script>
+    
+</body>
+</html>

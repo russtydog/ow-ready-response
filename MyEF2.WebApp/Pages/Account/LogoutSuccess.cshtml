@@ -1,0 +1,20 @@
+﻿@page
+@model MyEF2.WebApp.Pages.Account.LogoutSuccessModel
+@{
+	ViewData["Title"] = "Logout Successful";
+	Layout = "_GeneralBlockLayout";
+}
+<form method="post">
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="mb-3">
+        You have succesfully logged out. You can close your browser or tab, or click the button below to login again.
+    </div>
+    <div class="input-group mb-3">
+
+    </div>
+
+    <div class="mb-3">
+        <a href="Login" class="btn btn-success btn-block">Login</a>
+    </div>
+
+</form>

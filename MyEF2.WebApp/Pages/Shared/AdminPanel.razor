@@ -1,0 +1,167 @@
+﻿@page "/adminpanel"
+@using Microsoft.AspNetCore.Mvc.Rendering;
+
+@code {
+    [Inject]
+    private MyEF2.DAL.Services.UserService userService { get; set; }
+    [Inject]
+    private MyEF2.DAL.Services.SettingService settingService {get;set;}
+
+    private MyEF2.DAL.Entities.User user { get; set; }
+    private MyEF2.DAL.Entities.Setting setting{get;set;}
+
+    [Parameter]
+    public string UserName { get; set; }
+}
+
+@if (user.IsAdmin || (user.IsOrgAdmin && setting.UseOrganisations))
+{
+    <li class="nav-item @(SetupOptions())">
+        <a href="#" class="nav-link @(SetupActive)">
+            <i class="nav-icon fas fa-cog"></i>
+            <p>
+                Setup
+                <i class="right fas fa-angle-left"></i>
+            </p>
+        </a>
+
+        <ul class="nav nav-treeview">
+            @if (user.IsAdmin)
+            {
+                <li class="nav-item">
+                    <a href="../../../../Administration" class="nav-link @(PageNav("Administration"))">
+                        <i class="fas fa-lock nav-icon"></i>
+                        <p>Admin Settings</p>
+                    </a>
+                </li>
+                @if (user.IsAdmin)
+                {
+                    <li class="nav-item">
+                        <a href="../../../../Administration/Menus" class="nav-link @(PageNav("Administration/Menus"))">
+                            <i class="fas fa-bars nav-icon"></i>
+                            <p>Menus</p>
+                        </a>
+                    </li>
+                }
+                @if (user.IsAdmin && setting.UseOrganisations)
+                {
+                    <li class="nav-item">
+                        <a href="../../../../Administration/Organisations" class="nav-link @(PageNav("Administration/Organisations"))">
+                            <i class="fas fa-building nav-icon"></i>
+                            <p>Organisations</p>
+                        </a>
+                    </li>
+                }
+                @if (user.IsAdmin && setting.StripeSecretKey!="")
+                {
+                    <li class="nav-item">
+                        <a href="../../../../Administration/Stripe/Products" class="nav-link @(PageNav("Administration/Stripe/Products"))">
+                            <i class="fab fa-stripe-s nav-icon"></i>
+                        <p>Stripe Products</p>
+                        </a>
+                    </li>
+                }
+                <li class="nav-item">
+                    <a href="../../../../Administration/NotificationTemplates" class="nav-link @(PageNav("Administration/NotificationTemplates"))">
+                        <i class="far fa-envelope nav-icon"></i>
+                        <p>Notification Templates</p>
+                    </a>
+                </li>
+            }
+
+            @if (user.IsOrgAdmin && setting.UseOrganisations)
+            {
+                <li class="nav-item">
+                    <a href="../../../../Administration/Organisation" class="nav-link @(PageNav("Administration/Organisation"))">
+                        <i class="far fa-building nav-icon"></i>
+                        <p>Org Settings</p>
+                    </a>
+                </li>
+            }
+            @if (user.IsOrgAdmin && setting.UseOrganisations && !string.IsNullOrEmpty(setting.OpenAIKey))
+            {
+                <li class="nav-item">
+                    <a href="../../../../AI/Assistant" class="nav-link @(PageNav("AI/Assistant"))">
+                        <i class="fas fa-robot nav-icon"></i>
+                        <p>AI Assistant</p>
+                    </a>
+                </li>
+            }
+            @if(user.IsAdmin || user.IsOrgAdmin)
+            {
+                <li class="nav-item">
+                    <a href="../../../../Administration/Audits" class="nav-link @(PageNav("Administration/Audits"))">
+                        <i class="fas fa-diagnoses nav-icon"></i>
+                        <p>Audit</p>
+                    </a>
+                </li>
+            }
+            @if(user.IsAdmin && setting.UseFrontend)
+            {
+                <li class="nav-item">
+                    <a href="../../../../Administration/FrontEndSetup" class="nav-link @(PageNav("Administration/FrontEndSetup"))">
+                        <i class="fas fa-diagnoses nav-icon"></i>
+                        <p>Front End Setup</p>
+                    </a>
+                </li>
+            }
+        </ul>
+    </li>
+}
+@functions {
+    string PageNav(string pageName)
+    {
+        if(pageName==currentPage)
+        {
+            return "active";
+        }
+
+        return "";
+    }
+    private string SetupActive = "";
+    string SetupOptions()
+    {
+        List<string> stringList = new List<string>
+        {
+            "Administration",
+            "Administration/Menus",
+            "Administration/Menus/Menu",
+            "Administration/Stripe/Products",
+            "Administration/Stripe/Products/Product",
+            "Administration/NotificationTemplates",
+            "Administration/NotificationTemplateDetails",
+            "Administration/Organisation",
+            "AI/Assistant",
+            "Administration/Audits",
+            "Administration/Audits/Audit",
+            "Administration/FrontEndSetup"
+
+        };
+
+        if(stringList.Contains(currentPage))
+        {
+            SetupActive = "active";
+            return "menu-open";
+        }
+        return "";
+    }
+}
+
+@inject NavigationManager NavigationManager
+
+@code {
+    private string currentPage;
+
+
+    protected override void OnParametersSet()
+    {
+        user = userService.GetUserByAuthId(UserName);
+
+        setting=settingService.GetSettings();
+    }
+
+    protected override void OnInitialized()
+    {
+        currentPage = NavigationManager.ToBaseRelativePath(NavigationManager.Uri);
+    }
+}

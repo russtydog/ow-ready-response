@@ -1,0 +1,74 @@
+﻿@page "/menus"
+
+@code {
+    [Inject]
+    private MyEF2.DAL.Services.MenuService menuService { get; set; }
+    private List<MyEF2.DAL.Entities.Menu> menus { get; set; }
+
+    @inject NavigationManager NavigationManager
+
+    protected override void OnInitialized()
+    {
+        menus = menuService.GetMenus();
+        //if any menu is a submenu then it shouldn't be in the list of menus, it should just be a sub menu
+        menus = menus.Where(m => m.MenuId == null).ToList();
+
+        
+    }
+}
+@functions {
+    string PageNav(string pageName)
+    {
+        var pageNameLength = pageName.Length;
+        try
+        {
+            var currentUri = NavigationManager.Uri;
+            if(currentUri.EndsWith(pageName) || currentUri.EndsWith(pageName + "/"))
+            {
+                return "active";
+            }
+            return "";
+        }
+        catch (Exception ex)
+        {
+            return "";
+        }
+    }
+}
+    
+@foreach(var menu in menus)
+{
+    <li class="nav-item">
+        <a href="@menu.Url" class="nav-link @(PageNav(menu.Url))">
+            <i class="nav-icon @menu.Icon"></i>
+            <p>
+                @menu.Name
+            </p>
+            @if(menu.SubMenus.Count>0)
+            {
+                <i class="right fas fa-angle-left"></i>
+            }
+        </a>
+        @if(menu.SubMenus.Count > 0)
+        {
+            
+                   
+            <ul class="nav nav-treeview">
+                
+            @foreach(var subMenu in menu.SubMenus)
+            {
+                   
+                <li class="nav-item">
+                    <a href="@subMenu.Url" class="nav-link @(PageNav(subMenu.Url))">
+                        <i class="@subMenu.Icon nav-icon"></i>
+                        <p>@subMenu.Name</p>
+                    </a>
+                </li>
+                   
+            }
+                
+                </ul>
+        }
+            
+    </li>
+}

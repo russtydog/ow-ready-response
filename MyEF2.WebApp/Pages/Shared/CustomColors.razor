@@ -1,0 +1,165 @@
+﻿@page "/customcolors"
+
+@code {
+    [Inject]
+    private MyEF2.DAL.Services.SettingService settingService { get; set; }
+
+    private MyEF2.DAL.Entities.Setting settings { get; set; }
+
+    [Parameter]
+    public string UserName { get; set; }
+
+}
+
+@if (settings.ActiveItemBackgroundColor != null || settings.ActiveItemBackgroundColor != "")
+{
+    <style>
+        a {
+            color: @settings.ActiveItemBackgroundColor;
+        }
+
+        .btn-success {
+            background-color: @settings.ActiveItemBackgroundColor;
+            border-color: @settings.ActiveItemBackgroundColor;
+            color: @settings.ItemTextColor;
+        }
+
+        .btn-success:hover {
+            background-color: @settings.ActiveItemBackgroundColorHover;
+            border-color: @settings.ActiveItemBackgroundColorHover;
+            color: @settings.ItemTextColor;
+        }
+
+        .btn-success:focus{
+                background-color: @settings.ItemTextColor;
+                border-color: @settings.ActiveItemBackgroundColor;
+                color: @settings.ActiveItemBackgroundColor;
+        }
+
+            .btn-success:active {
+                background-color: @settings.ItemTextColor;
+                border-color: @settings.ActiveItemBackgroundColor;
+                color: @settings.ActiveItemBackgroundColor;
+            }
+        
+        .page-item.active .page-link {
+            background-color: @settings.ActiveItemBackgroundColor;
+            border-color: @settings.ActiveItemBackgroundColor;
+        }
+
+        .page-link {
+            color: @settings.ActiveItemBackgroundColor;
+        }
+
+        .page-link:hover {
+            color: @settings.ActiveItemBackgroundColor;
+        }
+
+        .dark-mode .btn-success {
+            background-color: @settings.ActiveItemBackgroundColor;
+            border-color: @settings.ActiveItemBackgroundColor;
+            color: @settings.ItemTextColor;
+        }
+
+            .dark-mode .btn-success:hover {
+                background-color: @settings.ActiveItemBackgroundColorHover;
+                border-color: @settings.ActiveItemBackgroundColorHover;
+                color: @settings.ItemTextColor;
+            }
+
+        .dark-mode .btn-success:focus {
+                background-color: @settings.ItemTextColor;
+            border-color: @settings.ActiveItemBackgroundColor;
+                color: @settings.ActiveItemBackgroundColor;
+        }
+
+            .dark-mode .btn-success:active {
+                background-color: @settings.ItemTextColor;
+                border-color: @settings.ActiveItemBackgroundColor;
+                color: @settings.ActiveItemBackgroundColor;
+            }
+
+        .sidebar-dark-primary .nav-sidebar > .nav-item > .nav-link.active, .sidebar-light-primary .nav-sidebar > .nav-item > .nav-link.active {
+            background-color: @settings.ActiveItemBackgroundColor;
+            color: @settings.ItemTextColor;
+        }
+
+        .dark-mode .sidebar-dark-primary .nav-sidebar > .nav-item > .nav-link.active, .dark-mode .sidebar-light-primary .nav-sidebar > .nav-item > .nav-link.active {
+            background-color: @settings.ActiveItemBackgroundColor;
+            color: @settings.ItemTextColor;
+        }
+
+        .btn-secondary {
+            background-color: @settings.ActiveItemBackgroundColor;
+            border-color: @settings.ActiveItemBackgroundColor;
+            color: @settings.ItemTextColor;
+        }
+
+        .dark-mode .page-item.active .page-link {
+            background-color: @settings.ActiveItemBackgroundColor;
+            border-color: @settings.ActiveItemBackgroundColor;
+        }
+
+        .dark-mode .page-item .page-link {
+            color: @settings.ActiveItemBackgroundColor;
+        }
+
+        .dark-mode .page-item:hover .page-link:hover {
+            color: @settings.ActiveItemBackgroundColor;
+        }
+
+        .bg-success {
+            background-color: @settings.ActiveItemBackgroundColor;
+        }
+
+    </style>
+
+    <style>
+
+        td a {
+            color: black;
+        }
+
+            td a:hover {
+                color: @settings.ActiveItemBackgroundColor;
+            }
+
+        .dark-mode td a {
+            color: white;
+        }
+
+        .dark-mode td:hover a:hover {
+            color: @settings.ActiveItemBackgroundColor;
+        }
+
+        .card-header {
+            background-color: @settings.ActiveItemBackgroundColor;
+            color: @settings.ItemTextColor;
+        }
+
+        .bg-custom {
+            background-color: @settings.ActiveItemBackgroundColor;
+            color: @settings.ItemTextColor;
+        }
+
+        .bg-custom-alt {
+            background-color: @settings.ActiveItemBackgroundColorHover;
+            color: @settings.ItemTextColor;
+        }
+
+        .card-success.card-outline {
+            
+            border-top: 3px solid @settings.ActiveItemBackgroundColor;
+        }
+        .dark-mode .card-success.card-outline {
+            
+            border-top: 3px solid @settings.ActiveItemBackgroundColor;
+        }
+    </style>
+}
+@code {
+    protected override void OnParametersSet()
+    {
+        settings = settingService.GetSettings();
+    }
+}

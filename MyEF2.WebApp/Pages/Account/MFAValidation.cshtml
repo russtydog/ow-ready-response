@@ -1,0 +1,27 @@
+﻿@page "/Account/MFAValidation/{returnUrl?}"
+@model MyEF2.WebApp.Pages.Account.MFAValidationModel
+@{
+	Layout = "_GeneralBlockLayout";
+    ViewData["Title"] = "MFA Auth";
+}
+
+<form method="post">
+	<div asp-validation-summary="All" class="text-danger"></div>
+
+    <div class="input-group mb-3">
+		<input type="number" class="form-control" placeholder="Code" asp-for="MFACode" />
+        <div class="input-group-append">
+            <div class="input-group-text">
+                 <span class="fas fa-lock"></span>
+            </div>
+        </div>
+        <span asp-validation-for="MFACode" class="text-danger"></span>
+	</div>
+    
+	<div class="mb-3">
+        <button type="submit" class="btn btn-success btn-block">Login</button>
+	</div>
+    <div class="mb-3">
+        If your Authenticator app is miss-configured or unavailable, <a href=MFAOTP>click here</a> for a temporary one time access code.
+    </div>
+</form>

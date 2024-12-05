@@ -1,0 +1,67 @@
+﻿@page "/Administration/OrganisationUser/{id?}"
+@model MyEF2.WebApp.Pages.Administration.OrganisationUserModel
+@{
+}
+
+<div class="col-md-6">
+    <!-- general form elements -->
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">User Details</h3>
+        </div>
+        <!-- /.card-header -->
+        <!-- form start -->
+        <form method="post" enctype="multipart/form-data">
+            <div class="card-body">
+                <div asp-validation-summary="All" class="text-danger"></div>
+                <div class="form-group">
+                    <label for="txtFirstname" asp-for="UserModel.FirstName">First Name</label>
+                    <input type="text" asp-for="UserModel.FirstName" class="form-control" id="txtFirstname" placeholder="First Name">
+                </div>
+                <div class="form-group">
+                    <label for="txtLastname" asp-for="UserModel.LastName">Last Name</label>
+                    <input type="text" asp-for="UserModel.LastName" class="form-control" id="txtLastname" placeholder="Last Name">
+                </div>
+                <div class="form-group">
+                    <label for="txtEmail" asp-for="UserModel.Email">Email</label>
+                    @if (Model.isEdit)
+                    {
+                        <input type="email" readonly asp-for="UserModel.Email" class="form-control" id="txtEmail" placeholder="Email">
+                    }
+                    else{
+                        <input type="email" asp-for="UserModel.Email" class="form-control" id="txtEmail" placeholder="Email">
+                    }
+                </div>
+                <div class="form-group">
+                    <label for="chkOrgAdmin" asp-for="UserModel.IsOrgAdmin">Organisation Admin</label>
+                    <input type="checkbox" class="form-control" data-toggle="toggle" style="width:40px" asp-for="UserModel.IsOrgAdmin">
+
+                </div>
+                <div class="form-group">
+                    <label for="chkLocked" asp-for="UserModel.Locked">Locked</label>
+                    <input type="checkbox" class="form-control" data-toggle="toggle" style="width:40px" asp-for="UserModel.Locked">
+
+                </div>
+
+                <div class="card-footer">
+                    <br>
+                    <button type="submit" class="btn btn-success" name="action" value="submit">Save</button>
+                    @if (Model.isEdit)
+                    {
+                        <a href="../Organisation" class="btn btn-default">Cancel</a>
+                    }
+                    else{
+                        <a href="Organisation" class="btn btn-default">Cancel</a>    
+                    }
+                    
+                </div>
+
+
+
+            </div>
+        </form>
+
+        <!-- form end -->
+    </div>
+</div>
+<!-- /.card -->

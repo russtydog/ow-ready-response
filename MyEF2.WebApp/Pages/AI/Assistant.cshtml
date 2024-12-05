@@ -1,0 +1,259 @@
+﻿@page
+@model MyEF2.WebApp.Pages.AI.AssistantModel
+@{
+    ViewData["Title"] = "Assistant";
+}
+
+<link href="~/dist/css/selectize.bootstrap4.css" rel="stylesheet" />
+<script src="~/dist/js/selectize/jquery.min.js"></script>
+
+@* <script src="~/dist/js/standalone/selectize.min.js"></script> *@
+
+<!-- Add Dropzone.js -->
+<script src="https://unpkg.com/dropzone@6.0.0-beta.1/dist/dropzone-min.js"></script>
+<link href="https://unpkg.com/dropzone@6.0.0-beta.1/dist/dropzone.css" rel="stylesheet" type="text/css" />
+
+
+<div class="col-md-6">
+    <!-- general form elements -->
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">AI Assistant</h3>
+        </div>
+        <!-- /.card-header -->
+        <!-- form start -->
+        <form method="post">
+            <div class="card-body">
+                <div asp-validation-summary="All" class="text-danger"></div>
+                <div class="form-group">
+                    <label for="txtProductName" asp-for="Organisation.AssistantName">Assistant Name</label>
+                    <input type="text" asp-for="Organisation.AssistantName" class="form-control" id="txtAssistantName" placeholder="Assistant Name">
+                </div>
+                <div class="form-group">
+                    <label for="txtProductName" asp-for="Organisation.AIInstructions">Assistant Instructions</label>
+                    <textarea asp-for="Organisation.AIInstructions" rows="8" class="form-control" id="txtAssistantInstructions" placeholder="Assistant Instructions"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="txtProductName" asp-for="Organisation.AIAssistantTargetWebsite">Assistant Target Website</label>
+                    <input type="url" asp-for="Organisation.AIAssistantTargetWebsite" class="form-control" id="txtAIAssistantTargetWebsite" placeholder="Assistant Target Website">
+                </div>
+                <div class="form-group">
+                    <label asp-for="Organisation.ShowAssistant">Show Assistant</label>
+                    <input type="checkbox" class="form-control" data-toggle="toggle" style="width:40px" asp-for="Organisation.ShowAssistant">
+                    </div>
+            </div>
+            <div class="card-footer">
+                <br>
+                <button type="submit" class="btn btn-success" name="action" value="submit">Save</button>
+                <button type="button" class="btn btn-default" data-toggle="modal" data-target="#modal-delete">
+                    Delete
+                </button>
+                <a class="btn btn-default" href="/">Back</a>
+            </div>
+
+            <!-- /.card -->
+            <div class="modal fade" id="modal-delete">
+                <div class="modal-dialog modal-delete">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Delete Confirmation</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <p>Are you sure you wish to delete this AI Assistant? This will remove the assistant including documents.&hellip;</p>
+                        </div>
+                        <div class="modal-footer justify-content-between">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-success" name="action" value="delete">Delete Confirm</button>
+                        </div>
+                    </div>
+                    <!-- /.modal-content -->
+                </div>
+                <!-- /.modal-dialog -->
+            </div>
+            <!-- /.modal -->
+        </form>
+
+        <!-- form end -->
+    </div>
+</div>
+<div class="col-md-6">
+<div class="row">
+    <div class="col-md-12">
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Documents</h3>
+        </div>
+        <div class="card-body">
+            <form action="?handler=Upload" class="dropzone" id="my-dropzone">
+
+                <script>
+                    jQuery.noConflict();
+                    (function ($) {
+                        $(document).ready(function () {
+
+                        });
+                    })(jQuery);
+                </script>
+
+                @* This section is for the dropzone uploader *@
+
+
+
+
+                <script>
+                    // Note that the name "myDropzone" is the camelized
+                    // id of the form.
+                    Dropzone.options.myDropzone = {
+                        // Configuration options go here
+                        addRemoveLinks: true,
+
+
+                        init: function () {
+                            this.on("addedfile", file => {
+                                console.log("A file has been added named: " + file.name);
+                            });
+                            this.on("removedfile", file => {
+                                console.log("A file has been removed: " + file.name);
+                                //post to ?handler=Remove passing file.name
+                                $.post("?handler=Remove", { fileName: file.name });
+                            });
+                        },
+
+                    };
+
+                </script>
+
+                @* <select asp-items="@(new SelectList(Model.Product.Pictures, "Id", "FileName"))"></select> *@
+                <script>
+                    //Dropzone.discover();
+                    jQuery(document).ready(function ($) {
+                        // Initialize Dropzone
+                        var myDropzone = new Dropzone("#my-dropzone", {
+                            url: "?handler=Upload", // Your upload URL
+                            addRemoveLinks: true, // Optional: Add remove links to uploaded files
+                            thumbnailWidth: 120, // Adjust the thumbnail width
+                            thumbnailHeight: 120 // Adjust the thumbnail height
+                        });
+
+                        // Array of existing pictures
+                        var existingPictures = @Html.Raw(Json.Serialize(Model.Organisation.AIDocuments));
+
+                        console.log(existingPictures);
+                        // Loop through existing pictures and add them to Dropzone
+                        existingPictures.$values.forEach(function (picture) {
+                            // Create a mock file object
+                            console.log(picture);
+                            var mockFile = { name: picture.documentName, size: 64 }; // Set a default size or fetch it from the server
+
+                            // // Calculate aspect ratio
+                            // var aspectRatio = 1; // Default aspect ratio
+                            // if (picture.width && picture.height) {
+                            //     aspectRatio = picture.width / picture.height;
+                            // }
+
+                            // // Calculate adjusted dimensions
+                            // var adjustedWidth = 120;
+                            // var adjustedHeight = 120 / aspectRatio;
+
+                            // Call the addFile method of Dropzone to add the file
+                            myDropzone.emit("addedfile", mockFile);
+
+                            // If you want to display an image thumbnail, you can set the thumbnail URL
+                            // if picture.documentPath is a .pdf extension then show a PDF image
+                            if (picture.documentPath.includes(".pdf")) {
+                                myDropzone.emit("thumbnail", mockFile, picture.documentPath);
+                                setTimeout(function () {
+                                    // Find the thumbnail element
+                                    var thumbnailElement = mockFile.previewElement.querySelector("[data-dz-thumbnail]");
+
+                                    if (thumbnailElement) {
+                                        // Hide the original thumbnail
+                                        thumbnailElement.style.display = 'none';
+
+                                        // Create a div element to hold the FontAwesome icon
+                                        var iconElement = document.createElement('div');
+                                        iconElement.classList.add('dz-image'); // Add Dropzone image class for styling
+                                        iconElement.style.display = 'flex';
+                                        iconElement.style.justifyContent = 'center';
+                                        iconElement.style.alignItems = 'center';
+                                        iconElement.style.height = '100%'; // Ensure it takes the full height of the container
+                                        iconElement.style.textAlign = 'center'; // Add textAlign for centering text
+                                        iconElement.innerHTML = '<i class="fas fa-file-pdf fa-4x"></i>'; // Adjust the size as needed
+
+                                        // Append the icon element to the mockFile preview element
+                                        mockFile.previewElement.querySelector('.dz-image').appendChild(iconElement);
+                                    }
+                                }, 10); 
+
+                            } else {
+                                myDropzone.emit("thumbnail", mockFile, picture.documentPath, adjustedWidth, adjustedHeight);
+                            }
+
+                            // myDropzone.emit("thumbnail", mockFile, picture.documentPath, adjustedWidth, adjustedHeight);
+
+                            // If you want to provide a download link, you can set the file URL
+                            myDropzone.emit("complete", mockFile);
+
+                            // Optionally, if you want to mark the file as success (green checkmark), you can call success method
+                            myDropzone.emit("success", mockFile);
+                        });
+                    });
+
+
+                </script>
+            </form>
+        </div>
+    </div>
+</div>
+        <!-- /.card -->
+    <div class="col-md-12">
+            <!-- general form elements -->
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Published Scripts</h3>
+                </div>
+                <!-- /.card-header -->
+                <!-- form start -->
+
+                <div class="card-body">
+                    @if (Model.Organisation.AssistantName != null)
+                    {
+                        <div style="background-color:lightgray;border:solid;color:black">
+                            &lt;head&gt;<br />
+
+                            &lt;link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.3/css/all.css"&gt;<br />
+
+
+
+                            &lt;script src="@Model.PublicWebsite/plugins/jquery/jquery.min.js"&gt;&lt;/script&gt;<br />
+
+                            &lt;script&gt;<br />
+                            var apiKey = "@Model.Organisation.Id";<br />
+                            &lt;/script&gt;<br />
+                            &lt;script src="@Model.PublicWebsite/aiassets/js/@Model.Organisation.Id/chatbot.js"&gt;&lt;/script&gt;<br />
+                            &lt;/head&gt;<br />
+                        </div>
+                    }
+                </div>
+
+
+
+
+
+                <!-- form end -->
+            </div>
+        </div>
+        <!-- /.card -->
+</div>
+</div>
+@section PageScripts {
+    @if(Model.Organisation.ShowAssistant){
+        <script>
+            var apiKey = "@Model.Organisation.Id";
+        </script>
+        <script src="../aiassets/js/@Model.Organisation.Id/chatbot.js"></script>
+    }
+}
