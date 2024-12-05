@@ -64,7 +64,7 @@ namespace MyEF2.WebApp.Pages.Administration
             //FavIcon Logo handler
             if (UploadFileFavIcon != null && UploadFileFavIcon.Length > 0)
             {
-                string fileName = "favicon" + Path.GetExtension(UploadFileFavIcon.FileName);
+                string fileName = "favicon.ico";
                 string filePath = Path.Combine("wwwroot/", fileName);
                 using (var stream = new FileStream(filePath, FileMode.Create))
                 {
